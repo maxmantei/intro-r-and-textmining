@@ -1,0 +1,260 @@
+---
+title: "Section 7<br>Basic Statistics/Econometrics"
+author: "Max Mantei"
+date: ""
+output:
+  ioslides_presentation: 
+    transition: slower
+    toc: yes
+    toc_float: yes
+    highlight: monochrome
+    css: ../custom-css.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## What we will cover in this section {.build}
+
+This section will cover:
+
+- R's formula syntax
+- Setting up design matrices with ``model.matrix``
+- Linear regression
+- Generalized Linear Models (GLM) in R
+- Overview: Packages for statistical modeling
+
+# R's formula syntax
+
+## R's formula syntax {.build}
+
+Formulas are a specific class of object in R that lets you store the symbolic relationship among variables. 
+
+They are used across many packages and for many statistical models in R. 
+
+A basic formula in R looks like this
+
+```{r}
+y ~ x + z
+```
+
+...where ``y`` is the *dependent* variable and ``x`` and ``z`` are the *independent* variables.
+
+```{r}
+f <- y ~ x + z  # formulas can be stored
+class(f)
+```
+
+These formulas are meaningless if the respective objects (``y``, ``x``, ``z``) do not exist.
+
+## R's formula syntax {.build}
+
+R's formula syntax is rich and several packages extend it in their own way.
+
+```{r}
+f1 <- y ~ x + z            # simple formula
+f2 <- log(y) ~ x + log(z)  # using math functions is possible
+f3 <- y ~ x*z              # interaction with main effects
+f4 <- y ~ x:z              # interaction without main effects
+f5 <- y ~ x + I(z/100)     # simple computation possible if wrapped by I(...)
+f6 <- y ~ 0 + x + z        # explicitly exclude the intercept
+```
+
+In context of linear regression, the corresponding regression equations are: 
+
+- ``f1``: $y = \alpha + \beta_1 x + \beta_2 z + \epsilon$
+- ``f2``: $\log(y) = \alpha + \beta_1 x + \beta_2 \log(z) + \epsilon$
+- ``f3``: $y = \alpha + \beta_1 x + \beta_2 z + \beta_3 (xz) + \epsilon$
+- ``f4``: $y = \alpha + \beta (xz) + \epsilon$
+- ``f5``: $y = \alpha + \beta_1 x + \beta_2 (\frac{z}{100}) +\epsilon$
+- ``f6``: $y = \beta_1 x + \beta_2 (\frac{z}{100}) +\epsilon$
+
+# Design matrices with ``model.matrix``
+
+## Design matrices with ``model.matrix`` {.build .smaller}
+
+We can use formulas to set up design matrices for regression analysis.
+
+```{r message=FALSE}
+kicker_data <- read_csv("data/kicker_match_data.csv") %>% select(match_id, team, goals, side, shots, possession_pct)
+head(kicker_data, 4)
+```
+
+```{r}
+X <- model.matrix(goals ~ side + shots + possession_pct, data = kicker_data)
+head(X, 4)
+```
+
+
+## Design matrices with ``model.matrix`` {.build}
+
+```{r}
+y <- kicker_data$goals # extract the dependent variable
+
+betas <- solve(t(X) %*% X) %*% t(X) %*% y # OLS
+round(betas, 4)
+```
+
+These regression coefficients seem reasonable.
+
+```{r}
+yhat <- X %*% betas
+(y - yhat)^2 %>% mean() %>% sqrt() # compute root mean squared error
+```
+
+Now, we would only need to computed standard errors, p-values, etc...
+
+# Linear regression
+
+## Linear regression {.build .smaller}
+
+Of course there is an easier way to run a regression.
+
+```{r}
+goals_reg <- lm(goals ~ side + shots + possession_pct, data = kicker_data)
+summary(goals_reg)
+```
+
+## Linear regression {.build .smaller}
+
+We can use the saved regression object with a bunch of useful functions.
+
+```{r}
+coef(goals_reg) # extract regression coefficients
+```
+
+```{r}
+yhat <- predict(goals_reg) # generates predictions
+yhat[1:6]                  # uses the original data by default
+```
+
+```{r}
+e <- residuals(goals_reg) # computes residuals (y - yhat)
+e[1:6]
+```
+
+## Linear regression {.build .smaller}
+
+We can also make predictions for new data. First lets make up some new observations and put them into a tibble using the ``tribble()`` (sic) function.
+
+```{r}
+new_data <- tribble(                  # tribble is a way to quickly create a tibble (tidyverse)
+  ~side , ~shots, ~possession_pct,    # specify the column names
+  "home", 15    , 55             ,    # insert comma separated values of observations
+  "away", 12    , 45             )
+```
+
+Now, we can compute predictions for the new data.
+
+```{r}
+yhat <- predict(goals_reg, newdata = new_data) 
+```
+
+We can add those predictions to the ``new_data`` frame.
+
+```{r}
+new_data %>% 
+  mutate(goals_pred = yhat)
+```
+
+## Linear regression {.build .smaller}
+
+There is also a `tidy(verse)` way to deal with regression output: ``broom``! 
+
+```{r}
+library(broom) # broom is part of the tidyverse but has to be loaded manually
+```
+
+```{r}
+tidy(goals_reg) # create a tidy tibble of regression coefficients (and their stats)
+```
+
+```{r}
+augment(goals_reg) %>% # create a tidy data set with added fitted values and mode
+  head(3)
+```
+
+# Generalized Linear Models (GLM) in R
+
+## Generalized Linear Models (GLM) in R {.smaller .build}
+
+Since goals are count data, we can fit a Poisson regression using the ``glm()`` function.
+
+```{r}
+goals_pois <- glm(goals ~ side + shots + possession_pct, 
+                  data = kicker_data,
+                  family = poisson(link = "log"))         # GLMs are defined by their "family" argument
+summary(goals_pois)
+```
+
+## Generalized Linear Models (GLM) in R {.build}
+
+Functions like ``coef()``, ``predict()``, and ``residuals()`` will work with GLM objects.
+
+```{r}
+# calculate the approx. percentage increase in # goals with a one unit change of the dep. variable
+approx_pct <- function(x) 100 * (exp(x) - 1)
+coef(goals_pois)[-1] %>% approx_pct() %>% round(2)
+```
+
+Defining residuals for GLMs is not trivial. R defaults to *deviance* residuals (check ``?residuals.glm()``).
+
+```{r}
+v <- residuals(goals_pois)
+v[1:6]
+```
+
+All ``broom`` functions, such as ``tidy`` and ``augment`` will work as well!
+
+## Generalized Linear Models (GLM) in R {.build}
+
+When using ``glm()`` you can specify the ``family`` argument. 
+
+- Linear model: ``family = Gaussian(link = "identity")`` (default)
+- Logit model: ``family = binomial(link = "logit")``
+- Probit model: ``family = binomial(link = "probit")``
+- Poisson model: ``family = poisson(link = "log")``
+- Gamma model: ``family = Gamma(link = "log")``
+- Over/under-dispersed Poisson: ``family = quasipoisson(link = "log")``
+- Over/under-dispersed Logit: ``family = quasibinomial(link = "logit")``
+- ...
+
+For more info check out the help file for ``family``.
+
+```{r, eval = FALSE}
+?family
+```
+
+Other packages extend the options you have, e.g. Negative Binomial, Tweedie, etc.
+
+# Overview: Packages for statistical modeling 
+
+## Overview: Packages for statistical modeling {.build}
+
+There are countless packages for statistical modeling in R.
+
+Here is a short (and obviously not complete) list of interesting ones.
+
+- Econometrics: panel models with ``plm``, IV with ``AER``, 2SLS with ``sem``
+- (Generalized) Linear Mixed Effects Models: ``lme4`` package
+- Generalized Additive Models (splines, smooths): ``mgcv`` package
+- Bayesian alternatives to popular functions: ``rstanarm``
+- Very flexible Bayesian modeling: ``brms``
+
+Remember you can install packages via ``install.packages()`` and get to the help file with ``help()`` (put the package name in ``""`` for each function).
+
+Tidying functions of the ``broom`` package work for a lot of models from other packages!
+
+## Summary
+
+In this section we covered:
+
+- R's formula syntax
+- Setting up design matrices with ``model.matrix``
+- Linear regression
+- Generalized Linear Models (GLM) in R
+- Overview: Packages for statistical modeling
+
+### You should now do the quiz/challenge for this section!
