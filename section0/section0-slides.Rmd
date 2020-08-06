@@ -3,14 +3,14 @@ title: "Automated Data Collection Using R"
 author: "Max Mantei"
 date: ''
 output:
-  beamer_presentation:
-    highlight: monochrome
   ioslides_presentation:
     transition: slower
     toc: yes
     toc_float: yes
     highlight: monochrome
     css: ../custom-css.css
+  beamer_presentation:
+    highlight: monochrome
 ---
 
 ```{r setup, include=FALSE}
