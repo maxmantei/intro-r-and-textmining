@@ -1,0 +1,988 @@
+---
+title: "Section 1<br>Objects and Data Structures I"
+author: "Max Mantei"
+date: ""
+output:
+  ioslides_presentation: 
+    transition: slower
+    toc: yes
+    toc_float: yes
+    highlight: monochrome
+    css: ../custom-css.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What we will cover in this section {.build}
+
+In this section we will cover the basics of R.
+
+- Numbers and Arithmetics
+- Strings and Variables (Assignment)
+- Booleans and Relational Operators
+- Vectors and Matrices
+
+### Things to note...
+
+Everything in R is an object.
+
+Every object has certain properties and functionality (methods).
+
+Learning these basic functions and how they work is like learning the vocabulary and grammar of a new language.
+
+Just like a real language, you will learn R by using (speaking) it. 
+
+# Numbers and Arithmetics
+
+## Numbers {.build}
+
+When you type in a number into the R console it will just give you back that number.
+
+```{r}
+3
+```
+
+```{r}
+-5
+```
+
+```{r}
+3.14
+```
+
+## Numbers {.build}
+
+Remember that everything in R is an object. 
+
+We can use the ``mode()`` function to find out *what kind* of object it is.
+
+```{r}
+mode(3)
+```
+
+```{r}
+mode(-5)
+```
+
+```{r}
+mode(3.14)
+```
+
+## Numbers {.build}
+
+```{r}
+3.14 + 2i
+```
+
+```{r}
+mode(3.14 + 2i)
+```
+
+```{r}
+3L
+```
+
+
+```{r}
+mode(3L)
+```
+
+
+## Arithmetics {.build}
+
+You can use R as an calculator, since it has all the usual arithmetic operations (and more) built in.
+
+```{r}
+5 + 3
+```
+
+```{r}
+8 - 5
+```
+
+```{r}
+2 * 3
+```
+
+```{r}
+13 / 8
+```
+
+## Arithmetics {.build}
+
+### Integer division
+
+How often does 3 fit into 5?
+
+```{r}
+5 %/% 3
+```
+
+### Modulus
+
+What is the remainder of of the (integer) division ``5 %/% 3``?
+
+```{r}
+5 %% 3
+```
+
+## Arithmetics (operator precedence) {.build}
+
+```{r}
+2 + 3 * 4
+```
+
+```{r}
+(2 + 3) * 4
+```
+
+```{r}
+3 + 5^2
+```
+
+```{r}
+(3 + 5)^2
+```
+
+## Arithmetics (operator precedence) {.build}
+
+...be careful with exponents!
+
+```{r}
+3^2 + 2
+```
+
+```{r}
+3^(2 + 2)
+```
+
+```{r}
+3^1/2
+```
+
+```{r}
+3^(1/2)
+```
+
+## More math: functions {.build}
+
+```{r}
+3^0.5
+```
+
+```{r}
+sqrt(3)
+```
+
+Other available math functions are (not exhaustive)
+
+``log()``, ``exp()``, ``sin()``, ``asin()``, ``cos()``, ``acos()``, ``tan()``, ``atan()``, ``sign()``, ``abs()``, ``...``
+
+To get to the help file of any function just precede it with an ``?`` and leave the parentheses empty or type ``help("...")`` with the name of the function where the ``...`` are.
+
+```{r eval=FALSE}
+?log()
+help("log")
+```
+
+# Strings and characters
+
+## Strings and characters {.build}
+
+You can define character data by wrapping it with quotes (single ``'``, or double ``"``).
+
+```{r}
+"a"
+```
+
+```{r}
+'a'
+```
+
+Strings are arrays of characters, i.e. words or full texts:
+
+```{r}
+"Hello"
+```
+
+```{r}
+"Hello World!"
+```
+
+## Strings and characters {.build}
+
+Note that R sees all of those as the same *kind* of object.
+
+```{r}
+mode("a")
+```
+
+```{r}
+mode('a')
+```
+
+```{r}
+mode("Hello")
+```
+
+```{r}
+mode("Hello World!")
+```
+
+## Strings and characters {.build}
+
+You can save numbers as ``character``, but they lose their ``numeric`` properties.
+
+```{r}
+"42"
+```
+
+```{r}
+mode("42")
+```
+
+When you try something like ``"42" + 3`` or ``"42" + "3"`` you will receive an error, since R does not know how to add (or subtract, multiply, divide, etc.) text data. 
+
+## Coersion {.build}
+
+You can coerce some ``character`` objects to ``numeric`` objects using the ``as.numeric()`` function.
+
+```{r}
+as.numeric("42")
+```
+
+```{r}
+as.numeric("42") + 3
+```
+
+You can only coerce ``character`` objects which have a reasonable ``numeric`` interpretation, e.g. ``as.numeric("-3.14")``. Something like ``as.numeric("a")`` or ``as.numeric("1a")`` will produce an error.
+
+You can also coerce `numeric` objects to ``character`` objects using ``as.character()``.
+
+```{r}
+as.character(42)
+```
+
+## Strings and characters: functions {.build}
+
+There are a few functions that you can apply to ``character`` objects.
+
+```{r}
+paste("Hello", "World!")
+```
+
+```{r}
+toupper("Hello World!")
+```
+
+```{r}
+tolower("Hello World!")
+```
+
+## Strings and characters: functions {.build}
+
+```{r}
+nchar("Hello World!")
+```
+
+
+```{r}
+substring("Hello World!", 7,11)
+```
+
+What do you think happens when we apply those functions to objects of type ``numeric``?
+
+```{r}
+nchar(1408)
+```
+
+```{r}
+substring(1408, 2,3)
+```
+
+## Variable assignment {.build}
+
+In R you can assign some value (of type ``numeric``, or ``character``, etc.) to a *variable* using the assignment operator ``<-``.
+
+```{r}
+a <- "Hello"
+b <- "World"
+```
+
+Assignment does not return anything, but in RStudio you will see those objects appear in the *Environment* pane (top right by default). Typing the variable into the R console will print its value.
+
+```{r}
+a
+```
+
+```{r}
+mode(a)
+```
+
+You can use all functions by simply referring to variables.
+
+## Variable assignment {.build}
+
+This obviously also works with ``numeric`` objects.
+
+```{r}
+x <- 3.14
+y <- -7
+```
+
+```{r}
+x^2
+```
+
+```{r}
+x + sin(y)*log(x) - x/y
+```
+
+If you change the assignment to a variable, all subsequent code will be affected by that change.
+
+```{r}
+x <- 100
+x + sin(y)*log(x) - x/y
+```
+
+## Variable assignment {.build}
+
+Valid variable names can only 
+
+- contain upper and lowercase letters, 
+- numbers (as long as they are **not** in the beginning of the variable name), 
+- dots ``.`` (as long as they are **not** followed by a number), and 
+- underscores ``_`` (as long as they are **not** in the beginning of the variable name).
+
+## Variable assignment {}
+
+Example                       | valid?
+------------------------------|-------
+apple                         | yes
+y.1                           | yes
+A123                          | yes
+.val                          | yes
+.1st                          | **no**
+my_SUPER_long_variable_name.1 | yes
+_this_variable                | **no**
+2var_name                     | **no**
+
+# Booleans and Relational Operators
+
+## Booleans and relational/logical operators {.build}
+
+Booleans are named after English mathematician, philosopher and logician [George Boole](https://en.wikipedia.org/wiki/George_Boole). With Booleans we can work with logical operations. In R they can take on the values ``TRUE`` (with abbreviation ``T``) and ``FALSE`` (with abbreviation ``F``).
+
+```{r}
+TRUE
+```
+
+```{r}
+mode(FALSE)
+```
+
+```{r}
+F
+```
+
+## Booleans and relational/logical operators {.build}
+
+Booleans (TRUE and FALSE values) are closely related to relational operations, i.e. comparisons of objects or states. 
+
+In R these are the relational operators:
+
+Operator | Meaning             | Example              | Example Result
+---------|---------------------|----------------------|---------------
+``>``    | greater than        | ``4 > 7``            | FALSE
+`<`      | less than           | ``12 < 20``          | TRUE
+`>=`     | greater or equal to | ``8 >= 3``           | TRUE
+``<=``   | less or equal to    | ``5 <= 5``           | TRUE
+``==``   | equal to            | ``"a" == "b"``       | FALSE
+``!=``   | not equal to        | ``"this" != "that"`` | TRUE
+
+## Booleans and relational/logical operators {.build}
+
+Booleans are often used in combination with logical operators.
+
+Operator | Meaning      | Example          | Example Result
+---------|--------------|------------------|---------------
+``&``    | logical and  | ``FALSE & TRUE`` | FALSE
+``|``    | logical or   | ``FALSE | TRUE`` | TRUE
+``!``    | logical not  | ``!TRUE``        | FALSE
+
+### Use parentheses.
+
+Relational and logical operators can (and often should) be used with parentheses. 
+
+For example ``!(...)`` negates any truth statement withing the parentheses. 
+
+Parentheses can be used to build  complex truth evaluations.
+
+# Vectors and Matrices
+
+## Vectors {.build}
+
+Have you wondered why there a ``[1]`` in front of all R output we have seen so far?
+
+```{r}
+3.14
+```
+
+There is a saying that everything in R is a vector.
+
+That's of course not true, but R is *heavily* reliant on vectors.
+
+Vectors are collections of values of same type in a particular order.
+
+You can create vectors in R using the concatenate function ``c()``.
+
+```{r}
+c(1, 3.14, -91, 5, -8.15, 0, 1408)
+```
+
+## Vectors {.build}
+
+```{r}
+my_numbers <- c(1, 1, 2, 3, 5, 8, 15)
+my_text <- c("Hello", "there")
+```
+
+```{r}
+my_numbers
+mode(my_numbers)
+```
+
+```{r}
+my_text
+mode(my_text)
+```
+
+## Vectors: coersion {.build}
+
+What's happening here?
+
+```{r}
+lyrics <- c(1, 2, 3, 4, "tell me that you love me more")
+```
+
+```{r}
+lyrics
+```
+
+A ``character`` vector! R will automatically convert to "sensible" modes:
+
+```{r}
+c(-5.2, 7, TRUE, 34, F)
+```
+
+```{r}
+c(-5.2, 7, TRUE, 34, F, "tree")
+```
+
+## Vectors: sequences {.build}
+
+### The colon ``:`` operator
+
+```{r}
+1:10
+```
+
+```{r}
+5:-5
+```
+
+```{r}
+4.5:9.5
+```
+
+```{r}
+4.5:9.9
+```
+
+## Vectors: sequences {.build}
+
+### The sequence ``seq()`` function
+
+```{r}
+seq(from = 5, to = 9, by = 0.7)
+```
+
+```{r}
+seq(5, -4, -0.3)
+```
+
+```{r}
+seq(from = 5, to = 9, length.out = 9)
+```
+
+## Vectors: sequences {.build}
+
+You can build vectors with repeating sequences using the ``rep()`` function.
+
+```{r}
+rep("a", times = 3)
+```
+
+```{r}
+rep(c("a", "b"), times = 3)
+```
+
+```{r}
+rep(c("a", "b", "c"), each = 3)
+```
+
+## Vectors: access {.build}
+
+The values of vectors are accessed through the brackets ``[]``.
+
+The vector ``month.abb`` contains abbreviated month names.
+
+```{r}
+month.abb[4]
+```
+
+Using a sequence as index:
+
+```{r}
+month.abb[6:8]
+```
+
+A negative index will exclude the specified element.
+
+```{r}
+month.abb[-11]
+```
+
+## Vectors: access {.build}
+
+You can use index vectors to access certain values of vectors.
+
+```{r}
+fibonacci <- c(1, 1, 2, 3, 5, 8) # use the first few numbers of the famous fibonacci sequence
+```
+
+```{r}
+fibonacci[c(3, 1, 6)]
+```
+
+```{r}
+fibonacci[c(-2, -4)] # or fibonacci[-c(2, 4)]
+```
+
+(Note that the ``# or fibonacci[-c(2, 4)]`` is a comment. It will not be evaluated.)
+
+```{r}
+fibonacci[c(TRUE, TRUE, FALSE, FALSE, FALSE, TRUE)]
+```
+
+Note that the logical index vector must be of same length as the indexed vector.
+
+## Vectors: manipulation {.build}
+
+You can insert and extract elements into/from vectors by indexing and assigning.
+
+```{r}
+my_months <- month.abb # copy the month.abb vector
+my_months[9] <- "Birthday Month"
+my_months
+```
+
+```{r}
+my_months[6:8] <- "Summer"
+my_months
+```
+
+```{r}
+december_abbreviation <- month.abb[12]
+december_abbreviation
+```
+
+## Vectors: recycling {.build}
+
+```{r}
+things_i_like <- c("music", "books", "food", "swimming")
+paste("I like", things_i_like)
+```
+
+```{r}
+paste("I", c("love", "like"), things_i_like)
+```
+
+```{r}
+paste("I", c("love", "like", "accept"), things_i_like)
+```
+
+Note that note all R functions support this. Some will throw a warning or an error.
+
+Always be aware of recycling: this can have unintended consequences!
+
+## Vectors: math with numeric vectors {.build}
+
+```{r}
+x <- c(1, -4, 5, 0)
+y <- c(-1, 2, 3, 6)
+```
+
+Vector math operations in R are usually elementwise.
+
+```{r}
+x + y
+```
+
+```{r}
+x / y
+```
+
+Here recycling also works:
+
+```{r}
+g <- c(1, 0)
+x * g
+```
+
+## Vectors: functions {.build}
+
+The ``length()`` function will return the number of elements in a vector.
+
+```{r}
+length(month.abb)
+```
+
+You can use this functions to reverse the order of a vector.
+
+```{r}
+len_month <- length(month.abb)
+month.abb[len_month:1]
+```
+
+## Vectors: functions {.build}
+
+There are two ways of (re-)ordering vectors.
+
+The ``order()`` function will return an index vector...
+
+```{r}
+months_ordering <- order(month.abb, decreasing = TRUE)
+months_ordering
+```
+
+...which you can then use to re-order the vector.
+
+```{r}
+month.abb[months_ordering]
+```
+
+Or, you can simply use the ``sort()`` function.
+
+```{r}
+sort(month.abb, decreasing = FALSE)
+```
+
+## Vectors: functions {.build}
+
+These functions help you summarize the data in a vector. Recall the short fibonacci sequence from before: ``r fibonacci``.
+
+```{r}
+summary(fibonacci)
+```
+
+```{r}
+fib_tab <- table(fibonacci) # save the resulting table
+fib_tab # the table shows the counts of each number in the vector
+```
+
+```{r}
+prop.table(fib_tab) # the argument to this function is actually a table!
+```
+
+## Vectors: functions {.build}
+
+```{r}
+x <- c(4, -3, 12, 1, 0, 2)
+```
+
+You can also directly compute quantities from numeric vectors.
+
+```{r}
+sum(x)
+```
+
+```{r}
+sum(x)/length(x) # with sum and length we can compute the mean
+```
+
+```{r}
+mean(x) # there is a function for computing the mean...
+```
+
+...and more such as: ``median()``, ``min()``, ``max()``, ``sd()``, ``var``, ``range()``, ...
+
+## Vectors: functions {.build}
+
+```{r}
+sin(x) # if necessary, functions are applied element-wise
+```
+
+```{r}
+log(x)
+```
+
+```{r}
+x > 0
+```
+
+```{r}
+log(x[x > 0])
+```
+
+## Some more logic with vectors {.build}
+
+With a vector like ``x <- c(4, -3, 12,  1,  0,  2)``, we can check some more logical statements.
+
+```{r}
+all(x > 0)
+```
+
+```{r}
+any(x > 0)
+```
+
+```{r}
+0 %in% x
+```
+
+```{r}
+which(x > 0)
+```
+
+## Some built-in vectors {.build}
+
+```{r}
+month.name
+```
+
+```{r}
+month.abb
+```
+
+```{r}
+letters
+```
+
+```{r}
+LETTERS
+```
+
+## A short note about ``factors`` {.build .smaller}
+
+There is a special vector type in R that is called ``factor``. 
+
+A ``factor`` is an extension of a vector used for categorical data.
+
+```{r}
+g <- rep(0:1, c(2, 4))
+g <- factor(g, levels = 0:1, labels = c("male", "female"))
+g
+```
+
+```{r}
+as.numeric(g)
+as.character(g)
+```
+
+The main advantage of factors is that R "recognizes" that a factor encodes categories and can thus apply appropriate methods.
+
+Examples are dummy coding in regression models, or visualizing categorical data in a plot.
+
+## Matrices
+
+You can create matrices using the ``matrix()`` function.
+
+```{r}
+M <- matrix(1:6, nrow = 3, ncol = 2, byrow = FALSE)
+M
+```
+
+The first argument specifies the elements in the matrix. (You can use recycling here!)
+
+```{r}
+mode(M)
+```
+
+```{r}
+class(M)
+```
+
+## Matrices: math {.build}
+
+Matrices have special properties, such as matrix transpose:
+
+```{r}
+t(M)
+```
+
+Elementwise (or entry-wise) addition of two matrices.
+
+```{r}
+N <- matrix(7:12, nrow = 3, ncol = 2, byrow = TRUE)
+M + N
+```
+
+## Matrices: math {.build .smaller}
+
+Elementwise multiplication (hadamard product)
+
+```{r}
+M * N
+```
+
+```{r}
+M / N
+```
+
+Functions are (usually) applied element-wise.
+
+```{r}
+log(M)
+```
+
+## Matrices: math {.build .smaller}
+
+Matrix multiplication:
+
+```{r}
+t(M) %*% N # necessary to take the transpose!
+```
+
+```{r}
+M %*% t(N)
+```
+
+Matrix inversion $X^{-1}$ is possible using ``solve()``
+
+```{r}
+solve(t(M) %*% N) # note, inverse only for square matrices!
+```
+
+## Matrices: access {.build}
+
+```{r}
+M[2, 1]
+```
+
+```{r}
+M[2, 1:2]
+```
+
+```{r}
+M[2, 1:2] <- -M[1, 1:2]
+M
+```
+
+## Matrices: functions {.build}
+
+```{r}
+length(M)
+```
+
+When applied to a matrix, the function ``length()`` will return the number of elements.
+
+```{r}
+nrow(M)
+```
+
+```{r}
+ncol(M)
+```
+
+```{r}
+dim(M) # gives dimension of matrix (ROWS x COLUMNS) in a vector
+```
+
+## Matrices: functions {.build .smaller}
+
+You can glue matrices (and vectors) together!
+
+Either column-wise with ``cbind()``:
+
+```{r}
+cbind(M, N)
+```
+
+...or row-wise with ``rbind()``:
+
+```{r}
+rbind(M, N)
+```
+
+*Be careful with dimensions and keep recycling in mind!*
+
+## Matrices: functions {.build}
+
+You can compute means of each column (row) of a matrix.
+
+```{r}
+colMeans(M)
+```
+
+```{r}
+rowMeans(M)
+```
+
+You can also take the column (row) wise sums of a matrix.
+
+```{r}
+colSums(M)
+```
+
+```{r}
+rowSums(M)
+```
+
+# Some notes
+
+## Excursion: modes, types, and classes... {}
+
+Example  | mode (``mode()``)             | type (``typeof()``)              | class (``class()``)
+---------|------------------|--------------------|-------------------
+``3``    | ``r mode(3)``    | ``r typeof(3)``    | ``r class(3)``
+``3.14`` | ``r mode(3.14)`` | ``r typeof(3.14)`` | ``r class(3.14)``
+``3L``   | ``r mode(3L)``   | ``r typeof(3L)``   | ``r class(3L)``
+``3+1i`` | ``r mode(3+1i)`` | ``r typeof(3+1i)`` | ``r class(3+1i)``
+``"a"``  | ``r mode("a")``  | ``r typeof("a")``  | ``r class("a")``
+``"Hi!"``| ``r mode("Hi!")``| ``r typeof("Hi!")``| ``r class("Hi!")``
+``TRUE`` | ``r mode(TRUE)`` | ``r typeof(TRUE)`` | ``r class(TRUE)``
+``F``    | ``r mode(F)``    | ``r typeof(F)``    | ``r class(F)``
+``c(1,2)``        | ``r mode(c(1,2))``        | ``r typeof(c(1,2))``        | ``r class(c(1,2))``
+``matrix(c(1,2))``| ``r mode(matrix(c(1,2)))``| ``r typeof(matrix(c(1,2)))``| ``r class(matrix(c(1,2)))``
+
+
+## Excursion: special values {}
+
+Example  | mode             | type               | class
+---------|------------------|--------------------|-------------------
+``NA``   | ``r mode(NA)``   | ``r typeof(NA)``   | ``r class(NA)``
+``NaN``  | ``r mode(NaN)``  | ``r typeof(NaN)``  | ``r class(NaN)``
+``NULL`` | ``r mode(NULL)`` | ``r typeof(NULL)`` | ``r class(NULL)``
+``Inf``  | ``r mode(Inf)``  | ``r typeof(Inf)``  | ``r class(Inf)``
+``NA_character_``| ``r mode(NA_character_)``| ``r typeof(NA_character_)``| ``r class(NA_character_)``
+``NA_complex_``  | ``r mode(NA_complex_)``  | ``r typeof(NA_complex_)``  | ``r class(NA_complex_)``
+``NA_integer_``  | ``r mode(NA_integer_)``  | ``r typeof(NA_integer_)``  | ``r class(NA_integer_)``
+``NA_real_``     | ``r mode(NA_real_)``     | ``r typeof(NA_real_)``     | ``r class(NA_real_)``
+
+## Summary {.build}
+
+We covered the basics of R. 
+
+- Numbers and arithmetics
+- Strings and variables (assignment)
+- Booleans and relational operators
+- Vectors and matrices
+
+You can re-watch any part if something is still unclear. 
+
+You will find a lot of resources online to all the covered topics (just google, really!).
+
+### Do the challenge/quiz for this section before you move on
