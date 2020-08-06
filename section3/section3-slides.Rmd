@@ -1,0 +1,162 @@
+---
+title: "Section 3<br>Objects and Data Structures II"
+author: "Max Mantei"
+date: ""
+output:
+  ioslides_presentation: 
+    transition: slower
+    toc: yes
+    toc_float: yes
+    highlight: monochrome
+    css: ../custom-css.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What we will cover in this section {.build}
+
+In this section we will look at some more data structures.
+
+- Data frames
+- Lists
+
+These structures
+
+# Data Frames
+
+## Data frames {.smaller .build}
+
+In R data sets are stored in ``data.frames``, which is a collection of vectors of same length but potentially different mode/type.
+
+```{r}
+my_df <- data.frame(my_numbers = 1:10, my_letters = letters[1:10])
+```
+
+```{r}
+head(my_df, 3)
+```
+
+```{r}
+tail(my_df, 2)
+```
+
+```{r}
+nrow(my_df)
+```
+
+```{r}
+ncol(my_df)
+```
+
+## Data frames {.smaller .build}
+
+```{r}
+names(my_df)
+```
+
+```{r}
+summary(my_df)
+```
+
+```{r}
+str(my_df)
+```
+
+## Data frames {.smaller .build}
+
+Accessing a data frame is similar to accessing a matrix.
+
+```{r}
+my_df$my_letters
+```
+
+```{r}
+my_df[,2]
+```
+
+```{r}
+my_df[,"my_letters"]
+```
+
+```{r}
+my_df$my_letters[1:2]
+```
+
+```{r}
+my_df[1:2,]
+```
+
+## Data frames {.build}
+
+```{r}
+my_new_df <- cbind(my_df, my_months = month.abb[1:10])
+head(my_new_df, 3)
+```
+
+```{r}
+my_new_df <- rbind(my_df, c(11, "k"))
+tail(my_new_df, 3)
+```
+
+# Lists
+
+## Lists {.build}
+
+Lists are the most flexible structure for data in R. A list is basically just a collection of objects of any class.
+
+```{r}
+my_list <- list(first = c(T, F), second = LETTERS, third = data.frame(num = 7:10, month = month.name[7:10]))
+my_list
+```
+
+## Lists {.smaller .build}
+
+```{r}
+length(my_list)
+```
+
+```{r}
+names(my_list)
+```
+
+```{r}
+my_list$first
+```
+
+```{r}
+my_list[[3]]
+```
+
+```{r}
+my_list$third$month
+```
+
+## Lists {.build}
+
+Use ``str()`` to find out about the structure of a list.
+
+```{r}
+str(my_list)
+```
+
+Lists can also store other objects: graphs, statistical models, ...
+
+... and other lists! These are then called nested lists.
+
+Usually lists (and especially nested lists) are not so nice to work with. 
+
+The great flexibility comes at the cost of less obvious functionality.
+
+## Summary
+
+In this section we covered ``data.frame`` objects.
+
+Later we will see an extension of ``data.frame``, the ``tibble`` (coming from *tbl*, which is short for table) and cover data set much more in depth.
+
+We also covered ``list`` objects.
+
+Lists can be seen as a container for data of variable size and type.
+
+### You should now do the quiz/challenge for this section!
