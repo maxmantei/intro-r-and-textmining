@@ -1,0 +1,228 @@
+---
+title: "Section 4<br>Programming Basics"
+author: "Max Mantei"
+date: ""
+output:
+  ioslides_presentation: 
+    transition: slower
+    toc: yes
+    toc_float: yes
+    highlight: monochrome
+    css: ../custom-css.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What we will cover in this section {.build}
+
+In this section we will cover some *programming* basics in R.
+
+- Conditional logic
+- Loops
+- Functions
+
+Conditional logic and loops are often called control structures. They control the *flow* of the computer program.
+
+# Conditional Logic
+
+## Conditional logic {.smaller .build}
+
+Conditional logic, or *if/else* in R look like this:
+
+```{r}
+x <- 12
+
+if(x == 10){
+  print("x is equal to 10")
+} else{
+  print("x is NOT equal to 10")
+}
+```
+
+You can check multiple conditions sequentially using ``else if()``:
+
+```{r}
+if(x == 10){
+  print("x is equal to 10")
+} else if(x > 10){
+  print("x is greater than 10")
+} else {
+  print("x is less than 10")
+}
+```
+
+## Conditional logic {.build}
+
+When the first ``TRUE`` is encountered, the rest will not be checked.
+
+```{r}
+x <- 12
+
+if(x == 10){
+  print("x is equal to 10")
+} else if(x > 10){
+  print("x is greater than 10")
+} else if(x == 12){
+  print("x is equal to 12")
+} else {
+  print("x is less than 10")
+}
+```
+
+If you want to make your code more efficient, you should put the condition which you expect to be true most frequently on top. This is often useful if the conditions are expensive to calculate.
+
+# Loops
+
+## Loops {.smaller .build}
+
+Loops are control structures that iterate over sequences. 
+
+In general using loops make the code more readable, less error-prone, and easier to change.
+
+### For-loop
+
+```{r}
+x <- vector(mode = "character", length = 10)
+for(i in 1:10){
+  x[i] <- letters[i]
+}
+x
+```
+
+Loops are useful when combined with conditional logic...
+```{r}
+for(i in 1:10){
+  if(i %% 2 == 0){
+    x[i] <- LETTERS[i]
+  } else {
+    x[i] <- letters[i]
+  }
+}
+x
+```
+
+## Loops {.smaller .build}
+
+### Foreach-loop
+A for-loop can also iterate over (arbitrary) items in a vector.
+```{r}
+ind <- c("This", "is", "text")
+for(i in ind){
+  print(i)
+}
+```
+
+### While-loop
+While loops are tricky, but you will probably not use them (often).
+```{r}
+j <- 1
+while(j < 3){
+  print("Hey!")
+  j <- j + 1
+}
+```
+
+# Functions
+
+## Functions {.build .smaller}
+
+There is a saying in programming, that you do not want to write the same code twice.
+
+Let's define a function for the cube root of x, i.e. $\sqrt[\leftroot{0}\uproot{0}3]{x}$ or $x^{\frac{1}{3}}$.
+
+```{r}
+cube_root <- function(x){  # you assign functions to their name
+  result <- x^(1/3)        # in the body of the function you do calculations or computations
+  return(result)           # in the end you specify what the function should return
+}
+```
+
+```{r}
+cube_root(64)
+```
+
+Arguments can have defaults values (in this case ``root = 1``).
+
+```{r}
+nth_root <- function(x, root = 1){
+  return(x^(1/root))
+}
+nth_root(25)
+nth_root(25, 2)
+```
+
+## Functions {.build .smaller}
+
+### Scope
+
+You can use variables from outside the function. But to use variables defined inside your functions outside of the function, you need to use the ``<<-`` operator.
+
+```{r}
+f <- 3
+pow <- function(x, p = 2){  # a silly function 
+  y <- x^p                  # that computes the power of a number (default = 2)
+  return(y + f)             # and adds a constant f to the result
+}
+pow(5)
+```
+
+```{r, eval = FALSE}
+y # will result in "Error: object 'y' not found"
+```
+
+You can re-write the function to make ``y`` accessible outside of the function: 
+
+```{r}
+pow <- function(x, p = 2){
+  y <<- x^p                # now y could be used outside if the function was run
+  return(y + f)
+}
+```
+
+# Functions, loops, and conditionals
+
+## Functions, loops, and conditionals {.build}
+
+```{r}
+annoying <- function(text){                                  # build a function that makes text "aNnOyInG"
+  split_text <- strsplit(text, split = "")                   # look up the help file ?strsplit
+  for(i in 1:length(split_text)){                            # we loop through every element of the list
+    for(j in 1:length(split_text[[i]])){                     # we loop through every item in the vector
+      if(j %% 2 == 0){                                       # if the index is even -> UPPER CASE
+        split_text[[i]][j] <- toupper(split_text[[i]][j])
+      } else {                                               # else (odd index) -> lower case
+        split_text[[i]][j] <- tolower(split_text[[i]][j])
+      }
+    }
+    split_text[[i]] <- paste(split_text[[i]], collapse = "") # collapse to single element
+  }
+  split_text <- unlist(split_text)                           # "remove" the list layer by unlisting (?unlist)
+  return(split_text)                                         # return the vector
+}
+```
+
+```{r}
+some_strings <- c("Hello World!", "Hey, how are you?")
+annoying(some_strings)
+```
+
+## Summary {.build}
+
+- Conditional logic
+- Loops
+
+To find out more about control flow in R, check ``?Control`` in the R console.
+
+- Functions
+
+Functions are useful in combinations with control flow.
+
+Start your function simple.
+
+Watch out for *scope* of your variables when writing function!
+
+### You should now do the quiz/challenge for this section!
+
+
