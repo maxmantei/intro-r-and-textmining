@@ -1,0 +1,418 @@
+---
+title: "Section 5<br>Data transformation in the tidyverse"
+author: "Max Mantei"
+date: ""
+output:
+  ioslides_presentation: 
+    transition: slower
+    toc: yes
+    toc_float: yes
+    highlight: monochrome
+    css: ../custom-css.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What we will cover in this section {.build}
+
+In this section we will explore the ``tidyverse``.
+
+- What’s tidy data?
+- What’s in the tidyverse?
+- The pipe ``%>%``
+- Data transformation with ``dplyr``
+- Tidy data with ``tidyr``
+- More: Factors, strings, and dates
+
+For more info you can explore https://www.tidyverse.org/.
+
+# Tidyverse
+
+## What’s tidy data? {.build}
+
+Principles of tidy data:
+
+- Every column is a variable
+- Every row is an observation
+- Every entry is a value
+
+Not everything can be converted to tidy data.
+
+Tidy data is useful, because it is similar to a design matrix used in statistics (especially regression).
+
+## What’s in the tidyverse? {.build .smaller}
+
+The ``tidyverse`` is a collection of packages that are designed to work together:
+
+- ``readr`` and ``haven`` to read in data
+- ``tibble`` an enhanced version of the ``data.frame``
+- ``dplyr`` lets you work inside and with data sets
+- ``tidyr`` lets you bring data into tidy format
+- ``ggplot2`` to plot your data
+- ``forcats`` for factors, ``stringr`` for strings, ``lubridate`` for dates
+- ...and more
+
+```{r eval = FALSE}
+install.packages("tidyverse") # to install or update all packages
+```
+
+You can use the tidyverse by calling:
+```{r}
+library(tidyverse)
+```
+
+## The pipe ``%>%`` {.build .smaller}
+
+The pipe operator can be awkward at first, but it is actually pretty simple and powerful.
+
+It takes whatever is on the left hand side of it and inputs it to a function on the right hand side *as its first argument*.
+
+```{r}
+x <- c(2, 6, 3, 0, -1, 5)
+x %>% mean()
+```
+
+Usually nested function calls are very hard to understand.
+
+```{r}
+y <- c(3, 4, 2, 0, -2, 7)
+sqrt(mean((y - x)^2))       # calculate root mean squared error (rmse)
+```
+
+With the pipe, those operations become a bit easier to read.
+
+```{r}
+(y - x)^2 %>% mean() %>% sqrt()
+```
+
+Many functions in the ``tidyverse`` are designed to work with the pipe.
+
+# Data transformation with dplyr
+
+## select {.smaller .build}
+
+The ``select`` function lets you select columns form a tibble.
+
+```{r}
+starwars %>%
+  head(4)
+```
+
+```{r}
+starwars %>% 
+  select(name, height) %>%
+  head(4)
+```
+
+## select {.smaller .build}
+
+You can use helper functions to help your select multiple columns, such as ``starts_with()``, ``ends_with()``, ``contains()``.
+
+```{r}
+starwars %>% 
+  select(name, ends_with("color")) %>%
+  head(4)
+```
+```{r}
+starwars %>% 
+  select(name, contains("_")) %>%
+  head(4)
+```
+
+## select {.smaller .build}
+
+You can also use the ``:`` operator to select ranges of columns.
+
+```{r}
+starwars %>% 
+  select(name:mass) %>%
+  head(4)
+```
+
+The *exclude* variables, you have to use a minus in front of them (also works with helper functions). You can also use ``-c()`` to exclude groups.
+
+```{r}
+starwars %>% 
+  select(-name, -contains("_"), -c(films, vehicles, starships)) %>%
+  head(4)
+```
+
+## filter {.smaller .build}
+
+The ``filter`` function lets you filter observations form a tibble.
+
+```{r}
+starwars %>% 
+  filter(height < 100)
+```
+
+## filter {.smaller .build}
+
+You can use multiple conditions separated with a comma.
+
+```{r}
+starwars %>% 
+  filter(height < 100, eye_color == "brown")
+```
+
+You can use the ``is.na()`` function to filter out missing values (negate with ``!``) and you can use the ``between()`` function to filter for value ranges.
+
+```{r}
+starwars %>% 
+  filter(is.na(hair_color), between(height, 90, 100))
+```
+
+## mutate {.smaller .build}
+
+The ``mutate`` function lets you create new variables inside a tibble.
+
+```{r}
+starwars %>% 
+  select(name, height) %>%
+  mutate(height_in_meters = height/100)
+```
+
+## mutate {.smaller .build}
+
+The ``mutate`` function is very useful in combination with the ``if_else()`` function. This lets you perform conditional logic row-by-row inside the data set.
+
+```{r}
+starwars %>% 
+  select(name, height) %>%
+  mutate(height_category = if_else(height < 150, "small", "tall"))
+                         # if_else(condition   , TRUE   , FALSE )
+```
+
+## arrange {.smaller .build}
+
+The ``arrange`` functions lets you re-order the observations inside a tibble.
+
+```{r}
+starwars %>% 
+  arrange(height)
+```
+
+## arrange {.smaller .build}
+
+You can arrange by descending order using ``desc()``.
+
+```{r}
+starwars %>% 
+  arrange(desc(height)) %>% 
+  head(3)
+```
+```{r}
+starwars %>% 
+  select(name, height, mass) %>%
+  mutate(round_height = round(height/100)) %>%
+  arrange(desc(round_height), desc(mass)) %>% # arranged first by "round_height", then "mass" (both descending)
+  head(5)
+```
+
+## group_by {.smaller .build}
+
+The ``group_by`` function lets you group the tibble. In a grouped tibble, operations are like ``mutate`` and ``arrange`` are performed by group.
+
+```{r}
+starwars %>% 
+  select(name, height) %>%
+  mutate(height_category = if_else(height < 150, "small", "tall")) %>%
+  group_by(height_category) %>% 
+  mutate(height_category_mean = mean(height),
+         deviation = height - height_category_mean)
+```
+
+## summarize {.build}
+
+The ``group_by`` function is particularly useful in combination with the ``summarize`` function. 
+
+```{r}
+starwars %>% 
+  group_by(gender) %>% 
+  summarize(height_mean = mean(height, na.rm = TRUE),
+            height_sd = sd(height, na.rm = TRUE))
+```
+
+## summarize {.build}
+
+With grouped tibbles you can often use the useful ``n()`` function, which returns the number of observations per group.
+
+```{r}
+starwars %>% 
+  group_by(gender) %>% 
+  summarize(height_mean = mean(height, na.rm = TRUE),
+            height_sd = sd(height, na.rm = TRUE),
+            group_size = n())
+```
+
+## join {.smaller}
+
+We can merge together tibbles in various ways.
+
+To illustrate this, it makes sense to have a look at two small tibbles.
+
+```{r}
+band_members
+```
+
+```{r}
+band_instruments
+```
+Note, that the two tibbles have one common variable (``name``), but different people in them.
+
+## join {.smaller .build}
+
+The ``left_join()`` keeps all observations of the left hand side (from the pipe operator) tibble.
+
+```{r}
+band_members %>% left_join(band_instruments) # band should be complete
+```
+
+The ``right_join()`` keeps all observations of the right hand side tibble.
+
+```{r}
+band_members %>% right_join(band_instruments) # plays should be complete
+```
+
+## join {.smaller .build}
+
+The ``inner_join()`` just keeps observations that are present in **both** tibbles.
+
+```{r}
+band_members %>% inner_join(band_instruments) # band and plays should be complete
+```
+
+And ``full_join()`` will keep **all** observations.
+
+```{r}
+band_members %>% full_join(band_instruments) # both band and plays will be incomplete
+```
+
+## join {.smaller .build}
+
+What if the two tibbles do not share a variable with the same name?
+
+```{r}
+band_instruments2 # "name" is now "artist"
+```
+You can use the ``by`` argument to specify the key by which to join.
+
+```{r}
+band_members %>% full_join(band_instruments2, by = c("name" = "artist"))
+```
+
+The left hand side in the ``by`` argument refers to the key variable in the left hand side tibble and the right hand side to the right hand side tibble.
+
+# Tidy data with tidyr
+ 
+## drop_na {.smaller .build}
+
+The ``starwars`` data set has 87 observations.
+
+```{r}
+nrow(starwars)
+```
+
+We can exclude all observations with at least one missing value in one of the variables.
+
+```{r}
+starwars %>% 
+  drop_na()
+```
+
+Now, we are left with 6 observations!
+
+## drop_na {.smaller .build}
+
+We can also just drop observations with missing values in specific variables.
+
+```{r}
+starwars %>% drop_na(height, mass, gender)
+```
+
+There are only 56 observations left. The variables `height`, `mass`, `gender` however, are complete.
+
+## pivot {.smaller .build}
+
+Pivoting lets you transform the data into truly tidy format. 
+
+Sometimes it is not so obvious what *tidy* is.
+
+```{r message=FALSE, warning=FALSE}
+kicker_data <- read_csv("data/kicker_match_data.csv") %>%
+  select(match_id, side, team, goals, shots)
+```
+
+```{r}
+kicker_data
+```
+
+What's the unit of observation?
+
+## pivot {.smaller .build}
+
+We can make the *match* the unit of observation. 
+
+If we want to preserve all information, this will make the data set wider (more columns, less observations), hence the name of the function ``pivot_wider()``.
+
+```{r}
+kicker_data %>% 
+  pivot_wider(id_cols = match_id, 
+              names_from = side, 
+              values_from = team:shots)
+```
+
+## pivot {}
+
+There is also the inverse operation ``pivot_longer`` (more observations, less columns).
+
+Pivoting is a really powerful tool, but can be quite challenging.
+
+I can highly recommend checking the vignette for more examples!
+
+```{r, eval = FALSE}
+vingette("pivot")
+```
+
+# More... factors, strings, dates
+
+## Factors, strings, and dates
+
+The ``tidyverse`` has packages to deal with certain data types.
+
+The ``forcats`` package helps you deal with categorical data encoded in ``factor`` variables. Read the vignette:
+
+```{r, eval = FALSE}
+vignette("forcats")
+```
+
+The ``stringr`` package deals with character vectors and strings.
+
+```{r, eval = FALSE}
+vignette("stringr")
+```
+
+Something that we will not cover at all in this course are data and time objects. The ``lubridate`` package has a wide selection of functions for working with times and dates in R.
+
+```{r, eval = FALSE}
+vignette("lubridate")
+```
+
+## Summary
+
+In this section we covered a few of the main features of the ``tidyverse``.
+
+- What’s the tidyverse?
+- The pipe ``%>%``
+- Many ``dplyr`` functions
+- Some ``tidyr`` functions
+
+For more info you can explore https://www.tidyverse.org/.
+
+A good online resource is the book *R for Data Science* freely available at https://r4ds.had.co.nz/
+
+### You should now do the quiz/challenge for this section!
+
+
