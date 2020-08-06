@@ -3124,7 +3124,7 @@ slide:not(.current) .plotly.html-widget{
           </hgroup>
   </slide>
 
-<slide class=""><hgroup><h2>What we will cover in this section</h2></hgroup><article  id="what-we-will-cover-in-this-section" class="build">
+<slide class=""><hgroup><h2>What we will cover in this section</h2></hgroup><article  class="build" id="what-we-will-cover-in-this-section">
 
 <p>In this section we will look at some more data structures.</p>
 
@@ -3133,11 +3133,11 @@ slide:not(.current) .plotly.html-widget{
 <li>Lists</li>
 </ul>
 
-<p>These structures</p>
+<p>These structures contain the other data structures we talked about before.</p>
 
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Data Frames</h2></hgroup><article  id="data-frames">
 
-</article></slide><slide class=""><hgroup><h2>Data frames</h2></hgroup><article  id="data-frames-1" class="smaller build">
+</article></slide><slide class=""><hgroup><h2>Data frames</h2></hgroup><article  class="smaller build" id="data-frames-1">
 
 <p>In R data sets are stored in <code>data.frames</code>, which is a collection of vectors of same length but potentially different mode/type.</p>
 
@@ -3164,7 +3164,7 @@ slide:not(.current) .plotly.html-widget{
 
 <pre >## [1] 2</pre>
 
-</article></slide><slide class=""><hgroup><h2>Data frames</h2></hgroup><article  id="data-frames-2" class="smaller build">
+</article></slide><slide class=""><hgroup><h2>Data frames</h2></hgroup><article  class="smaller build" id="data-frames-2">
 
 <pre class = 'prettyprint lang-r'>names(my_df)</pre>
 
@@ -3186,7 +3186,7 @@ slide:not(.current) .plotly.html-widget{
 ##  $ my_numbers: int  1 2 3 4 5 6 7 8 9 10
 ##  $ my_letters: chr  &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...</pre>
 
-</article></slide><slide class=""><hgroup><h2>Data frames</h2></hgroup><article  id="data-frames-3" class="smaller build">
+</article></slide><slide class=""><hgroup><h2>Data frames</h2></hgroup><article  class="smaller build" id="data-frames-3">
 
 <p>Accessing a data frame is similar to accessing a matrix.</p>
 
@@ -3212,7 +3212,7 @@ slide:not(.current) .plotly.html-widget{
 ## 1          1          a
 ## 2          2          b</pre>
 
-</article></slide><slide class=""><hgroup><h2>Data frames</h2></hgroup><article  id="data-frames-4" class="build">
+</article></slide><slide class=""><hgroup><h2>Data frames</h2></hgroup><article  class="build" id="data-frames-4">
 
 <pre class = 'prettyprint lang-r'>my_new_df &lt;- cbind(my_df, my_months = month.abb[1:10])
 head(my_new_df, 3)</pre>
@@ -3232,7 +3232,7 @@ tail(my_new_df, 3)</pre>
 
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Lists</h2></hgroup><article  id="lists">
 
-</article></slide><slide class=""><hgroup><h2>Lists</h2></hgroup><article  id="lists-1" class="build">
+</article></slide><slide class=""><hgroup><h2>Lists</h2></hgroup><article  class="build" id="lists-1">
 
 <p>Lists are the most flexible structure for data in R. A list is basically just a collection of objects of any class.</p>
 
@@ -3253,7 +3253,7 @@ my_list</pre>
 ## 3   9 September
 ## 4  10   October</pre>
 
-</article></slide><slide class=""><hgroup><h2>Lists</h2></hgroup><article  id="lists-2" class="smaller build">
+</article></slide><slide class=""><hgroup><h2>Lists</h2></hgroup><article  class="smaller build" id="lists-2">
 
 <pre class = 'prettyprint lang-r'>length(my_list)</pre>
 
@@ -3279,7 +3279,7 @@ my_list</pre>
 
 <pre >## [1] &quot;July&quot;      &quot;August&quot;    &quot;September&quot; &quot;October&quot;</pre>
 
-</article></slide><slide class=""><hgroup><h2>Lists</h2></hgroup><article  id="lists-3" class="build">
+</article></slide><slide class=""><hgroup><h2>Lists</h2></hgroup><article  class="build" id="lists-3">
 
 <p>Use <code>str()</code> to find out about the structure of a list.</p>
 

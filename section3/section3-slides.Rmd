@@ -22,7 +22,7 @@ In this section we will look at some more data structures.
 - Data frames
 - Lists
 
-These structures
+These structures contain the other data structures we talked about before.
 
 # Data Frames
 
