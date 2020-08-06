@@ -1,0 +1,65 @@
+---
+title: "Automated Data Collection Using R"
+author: "Max Mantei"
+date: ''
+output:
+  beamer_presentation:
+    highlight: monochrome
+  ioslides_presentation:
+    transition: slower
+    toc: yes
+    toc_float: yes
+    highlight: monochrome
+    css: ../custom-css.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Outline of this course
+
+- Section 1: Objects and Data Structures I
+- Section 2: Data I/O
+- Section 3: Objects and Data Structures II
+- Section 4: Programming Basics
+- Section 5: Data transformation in the ``tidyverse``
+- Section 6: Plotting data with ``ggplot2``
+- Section 7: Basic Statistics/Econometrics
+- Section 8: Working with Strings and Texts
+
+## Installing R and RStudio
+
+First install R at https://cran.r-project.org/
+
+- Go to Mac/Windows
+    - On Windows click ``base``, then *Download R 4.0.2 for Windows*
+    - On Mac download ``R-4.0.2.pkg``
+    
+Then install Rstudio
+
+- Go to https://rstudio.com/products/rstudio/download/
+- Click ``Download`` under **RStudio Desktop (Free)**
+- Click ``Download for Windows/Mac``
+
+A good installation tutorial can be found here:
+
+https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu
+
+Another excellent resource for setting up R and Rstudio is:
+
+https://www.dataquest.io/blog/tutorial-getting-started-with-r-and-rstudio/
+
+## Downloading course materials
+
+Download the course material at:
+
+https://github.com/maxmantei/intro-r-and-textmining
+
+- Click on ``Code``
+- Click on ``Download ZIP``
+- Save and unzip the downloaded folder
+- Open the folder and click ``intro-r-and-textmining.Rproj``
+
+This will open the RStudio project that contains all materials.
+
