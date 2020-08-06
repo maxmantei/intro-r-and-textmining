@@ -1,0 +1,161 @@
+---
+title: "Section 2<br>Data I/O"
+author: "Max Mantei"
+date: ""
+output:
+  ioslides_presentation: 
+    transition: slower
+    toc: yes
+    toc_float: yes
+    highlight: monochrome
+    css: ../custom-css.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What we will cover in this section {.build}
+
+This section will cover:
+
+- Getting user input into R
+- Reading and writing ``txt`` files
+- Packages in R
+- Reading and writing ``csv`` files
+- Other file formats
+
+Most of the time real life data is messy, so reading and writing data can be tricky. 
+
+This section can not cover all details but should give you a good start to get data into and out of R.
+
+# Getting user input into R
+
+## User input {.build}
+
+To get input from the user and save it a variable, you can use the ``readline()`` function. ``readline()`` will pause and wait for user input and proceed when the user hits ``Enter``. To save the input, just assign to some variable.
+
+``readline()`` has a ``prompt`` argument where you can specify a message for the prompt.
+
+```{r, eval = FALSE}
+user_input <- readline(prompt = "Say something: ")
+```
+
+Note that the user input is always ``character``, so you might need to covert to other types using ``as.numeric()``, ``as.integer()``, ``as.logical()``, etc.
+
+This is usually only useful if
+
+- not in interactive mode, or 
+- if it is part of a long script, or
+- you really need to input data manually.
+
+# Reading and writing ``txt`` files
+
+## Reading ``txt`` files {.smaller .build}
+
+We have a text file (with ``.txt`` extension) saved at ``/intro-r-and-textmining/data/example.txt``. Its content is
+
+```
+This is an example
+With multiple lines
+Of text
+
+```
+We can read in ``.txt`` files line-by-line using the ``readLines()`` function. As (first) argument we specify the path and file name of the file we want to open.
+
+```{r}
+my_text_file <- readLines("data/example.txt")
+my_text_file
+```
+
+We can also write text to files using ``writeLines()``. Each element of the input vector will be written on a new line.
+
+```{r}
+new_text <- c(my_text_file, "...and some more text!")
+writeLines(new_text, "data/example2.txt")
+```
+
+Writing functions do usually not return anything. But we can check the result:
+
+```{r}
+readLines("data/example2.txt")
+```
+
+# Packages in R
+
+## Packages in R {.smaller .build}
+
+So far we have used only R's built-in functions.
+
+R is open source software and many people contribute to it, usually by writing packages that extend the functionality of R.
+
+There is one centralized repository for R packages (CRAN), which makes it easy to install most packages. To install a package, you simply use the ``install.packages()`` function. 
+
+```{r, eval = FALSE}
+install.packages("readr") # this installs the readr package
+```
+
+Additional packages have to be loaded before you can use them via the ``library()`` function. This has to be done once per session. Conventionally you load all needed packages in the beginning of your script file.
+
+```{r, eval = FALSE}
+library(readr) # this loads the readr package
+```
+
+Some packages come with *vignettes*. These are often little tutorials demonstrating key functionality of a package. They are often worthwhile to check out and work through.
+
+It is often useful to use the more general help tool ``??...`` to access help pages of packages.
+
+```{r, eval = FALSE}
+??readr
+```
+
+# Reading and writing ``csv`` files
+
+## Read and write ``csv`` files with readr  {.build}
+
+One of the most comma file formats for structured data is ``csv`` (comma separated values). We can read in ``csv`` using the readr package, which we first have to load.
+
+```{r}
+library(readr)
+```
+
+Then we can use the function ``read_csv()``.
+
+```{r message=FALSE, eval = FALSE}
+kicker_data <- read_csv("data/kicker_match_data.csv")
+```
+
+Now the data is stored in memory and you can use it.
+
+To write tables of data to disk as a ``csv`` file you can use ``write_csv()``.
+
+```{r eval = FALSE}
+write_csv(my_data, "data/my_new_data.csv")
+```
+
+We will learn about data frames (tables of data in R) later.
+
+# Other file formats
+
+## Other file formats {.build}
+
+There are packages to read and write almost all possible data formats in R. Aside from ``readr``, there are also
+
+- ``haven``, to read (SPSS, Stata, SAS)
+- ``readxl``, to read in Excel files
+
+...and numerous others.
+
+Usually a quick google search will show you a way (often multiple ways) to open a specific file format.
+
+## Summary
+
+In this section you learned how to
+
+- get user input into R,
+- use ``readLines`` and ``writeLines``,
+- install and load packages in R ,
+- use ``read_csv`` and ``write_csv``,
+- import other file formats into R.
+
+### You should now do the quiz/challenge for this section!
