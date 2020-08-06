@@ -1,0 +1,124 @@
+---
+title: "Section 6<br>Plotting data with ggplot2"
+author: "Max Mantei"
+date: ""
+output:
+  ioslides_presentation: 
+    transition: slower
+    toc: yes
+    toc_float: yes
+    highlight: monochrome
+    css: ../custom-css.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What we will cover in this section {.build}
+
+A very (very) brief introduction to ``ggplot2``, one of the most (if not the most) sophisticated tool to plot data.
+
+- Basics of ``ggplot2``
+- Histograms and count plots
+- Scatterplots and line plots
+- Plot more with facets
+
+# Basics of ``ggplot2``
+
+## Basics of ``ggplot2`` {.build}
+
+``ggplot2`` is based on a book called *Grammar of Graphics* (by Leland Wilkinson). It embodies a deep philosophy of visualization.
+
+Usually you start with an empty plot for which you specify ``data`` and so called *"aesthetics"* (or ``aes``). These are the basic outlines of your plot.
+
+You then add layers of points, lines, text, etc. 
+
+You can furthermore specify faceting and scaling/orientation of the coordinate system.
+
+``ggplot2`` is part of the tidyverse.
+
+```{r}
+library(tidyverse)
+```
+
+# Some examples 
+
+## Histograms {.build .smaller}
+
+```{r message=FALSE}
+kicker_data <- read_csv("data/kicker_match_data.csv")
+```
+
+```{r fig.align='center', fig.height=4, fig.width=7, message=FALSE}
+kicker_data %>% 
+  ggplot(aes(x = goals)) +
+  geom_histogram()
+```
+
+## Bar charts {.build .smaller}
+
+```{r fig.align='center', fig.height=4, fig.width=7, message=FALSE}
+kicker_data %>% 
+  filter(team == "Bayern München") %>%
+  ggplot(aes(y = distance_km, x = matchday, fill = side)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Distance run by match day", subtitle = "Data for Bayern Munich, season 19/20") +
+  ylab("distance in km")
+```
+
+## Line plots {.build .smaller}
+
+```{r fig.align='center', fig.height=4, fig.width=7, message=FALSE}
+some_teams <- c("Bayern München", "Hertha BSC", "Borussia Dortmund", "Hamburger SV")
+kicker_data %>% 
+  filter(team %in% some_teams) %>%
+  ggplot(aes(y = possession_pct, x = matchday, color = team)) +
+  geom_line() +
+  ggtitle("Ball possession percentage by match day", subtitle = "Data for season 19/20") +
+  ylab("ball possesion %")
+```
+
+## Scatterplot {.build .smaller}
+
+```{r fig.align='center', fig.height=4, fig.width=7, message=FALSE}
+scatter <- kicker_data %>%
+  ggplot(aes(y = shots, x = possession_pct)) +
+  geom_point() +
+  ggtitle("Ball possession and number of shots", subtitle = "Data for season 19/20") +
+  xlab("ball possesion %")
+scatter
+```
+
+## Scatterplot with smooth {.build .smaller}
+
+```{r fig.align='center', fig.height=4, fig.width=7, message=FALSE}
+scatter + geom_smooth()
+```
+
+## Faceting {.build .smaller}
+
+```{r fig.align='center', fig.height=4, fig.width=7, message=FALSE}
+some_teams <- c("Bayern München", "Hertha BSC", "Borussia Dortmund", "Hamburger SV")
+kicker_data %>% 
+  filter(team %in% some_teams) %>%
+  ggplot(aes(y = shots, x = possession_pct, color = team)) +
+  geom_point() +
+  ggtitle("Ball possession and number of shots", subtitle = "Data for season 19/20") +
+  xlab("ball possesion %") +
+  geom_smooth(method = "lm") +
+  facet_wrap(~team)
+```
+
+## Summary
+
+In this section we had a glimpse into the world of ``ggplot2``...
+
+- Basics of ``ggplot2``
+- Histograms and count plots
+- Scatterplots and line plots
+- Plot more with facets
+
+### You should now do the quiz/challenge for this section!
+
+
