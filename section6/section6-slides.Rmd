@@ -110,6 +110,22 @@ kicker_data %>%
   facet_wrap(~team)
 ```
 
+## Multiple y aesthetics {.build .smaller}
+
+```{r fig.align='center', fig.height=4, fig.width=7, message=FALSE}
+kicker_data %>%
+  group_by(matchday) %>%
+  mutate(mean_distance = mean(distance_km)) %>%
+  filter(team %in% some_teams) %>%
+  ggplot(aes(x = matchday)) +
+  geom_col(aes(y = distance_km, fill = side)) +
+  geom_line(aes(y = mean_distance), linetype = "dashed") +
+  ggtitle("Distance run by match day")  +
+  ylab("distance in km") +
+  coord_cartesian(ylim = c(100,125)) +
+  facet_wrap(~team)
+```
+
 ## Summary
 
 In this section we had a glimpse into the world of ``ggplot2``...
