@@ -62,7 +62,7 @@ kicker_data %>%
 kicker_data %>% 
   filter(team == "Bayern München") %>%
   ggplot(aes(y = distance_km, x = matchday, fill = side)) +
-  geom_bar(stat = "identity") +
+  geom_col() +
   ggtitle("Distance run by match day", subtitle = "Data for Bayern Munich, season 19/20") +
   ylab("distance in km")
 ```
