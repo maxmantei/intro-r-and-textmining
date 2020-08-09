@@ -1,0 +1,160 @@
+---
+title: "Section 8<br>Working with Strings and Texts"
+author: "Max Mantei"
+date: ""
+output:
+  ioslides_presentation: 
+    transition: slower
+    toc: yes
+    toc_float: yes
+    highlight: monochrome
+    css: ../custom-css.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What we will cover in this section {.build}
+
+I will give you a short overview of how to work with strings and text data in R.
+
+- ``stringr`` package: Overview and resources
+- Brief introduction to the ``tidytext`` package
+
+Note, that textmining and natural language processing (NLP) is a huge field.
+
+By the end of this section you should feel confident to start learning about textmining working on your own projects.
+
+# Working with strings using ``stringr``
+
+## Working with strings using ``stringr`` {.build}
+
+As mentioned before, the ``stringr`` package is also part of the ``tidyverse``.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+help("stringr")
+```
+
+Go to useful links and click on http://stringr.tidyverse.org. There you will find a link to the *cheatsheet* for ``stringr``.
+
+Recall the ``readr`` package, which contains the ``read_csv`` function although there is a built-in ``read.csv`` function in base R.
+
+The ``stringr`` package is similar in a way, because it mimics many functions in base R, but extends them.
+
+```{r}
+substring("banana", 3, 6)   # base R function
+str_sub("banana", 3, 6)     # stringr function
+```
+
+## Working with strings using ``stringr`` {.build}
+
+Note that all ``stringr`` functions start with ``str_``, which makes it very easy to find them in RStudio once you have loaded the package:
+
+- just type ``str_`` and hit ``TAB``
+- Now you can use the arrow up/down key to browse through all ``stringr`` functions
+
+Function arguments of ``stringr`` functions are also
+
+- more consistent, 
+- useful for piping using the ``%>%`` operator.
+
+## Working with strings using ``stringr`` {.smaller .build}
+
+My personal favorite ``stringr`` functions are:
+
+```{r}
+str_detect("This is a sentence about a banana.", "banana")
+```
+
+This function is really useful in combination with ``dplyr::filter()``.
+
+```{r}
+str_replace("This is a sentence about a banana.", "banana", "mango")
+```
+
+This function is useful to clean data and make it more consistent.
+
+```{r}
+fruit <- c("banana", "apple", "ananas", "mangos", "pears")
+str_match(fruit, "(b|m)*(an)(ana|go)(s)*")
+```
+
+## Regular expressions! {.build}
+
+``stringr`` functions really become powerful once you use them with *regular expressions*. 
+
+Regular expressions are beyond the scope of this course, but if you are serious about working with text data, you have to learn them.
+
+Again, you should also check out the ``stringr`` cheatsheet (page 2)!
+
+Check out chapter 14 in *R for Data Science*.
+
+Work through the *Regular expressions* article on the stringr website.
+
+# Textmining with ``tidytext``
+
+## Textmining with ``tidytext`` {.build}
+
+The ``tidytext`` package provides functions to do textmining in a tidy framework.
+
+Aim of ``tidytext`` is to work seamlessly with other ``tidyverse`` packages.
+
+There is a free online book about textmining in R using the ``tidytext`` package by Julia Silge and David Robinson: https://www.tidytextmining.com/
+
+## Textmining with ``tidytext``: using ``unnest_token`` {.build}
+
+```{r}
+library(tidytext)
+```
+
+First get get some examples texts from the ``data/reviews/`` folder.
+
+```{r message=FALSE, warning=FALSE}
+txt_files <- list.files("data/reviews/")    # returns a list of files in a specified folder
+n_files <- length(txt_files)                # how many files are in that folder?
+txts <- vector(mode = "character", length = n_files)
+for(i in 1:n_files){
+  txts[i] <- readLines(paste0("data/reviews/", txt_files[i]))
+}
+text_df <- tibble(file = txt_files, text = txts) %>% mutate(file = str_remove(file, ".txt"))
+text_df                                     # we saved the texts as tibble
+```
+
+## Textmining with ``tidytext``: using ``unnest_token`` {.build}
+
+```{r}
+words_df <- text_df %>% unnest_tokens(word, text, "words")
+words_df %>% head(4)
+```
+
+We can then use all of the usual ``tidyverse`` data manipulation tricks...
+
+```{r}
+words_df %>% count(file)
+```
+
+## Textmining with ``tidytext``: using ``unnest_token`` {.build}
+
+We can also count the words...
+
+```{r}
+words_df %>% count(word, sort = TRUE) %>% head(3)
+```
+
+```{r}
+words_df %>% anti_join(stop_words) %>% count(word, sort = TRUE) %>% head(3)
+```
+
+## Textmining with ``tidytext``: using ``unnest_token`` {.smaller .build}
+
+```{r}
+gram_df <- text_df %>% unnest_tokens(grams, text, "ngrams", n = 3)
+gram_df %>% head()
+```
+
+```{r}
+gram_df %>% separate(grams, into = paste0("word", 1:3), sep = " ")
+```
+
