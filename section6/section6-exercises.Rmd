@@ -1,0 +1,107 @@
+---
+title: "Section 6 Exercises"
+output: html_notebook
+---
+
+## Exercise 6.0
+
+Load the ``tidyverse`` package and the ``starwars`` data set.
+
+```{r}
+library(tidyverse)
+starwars <- starwars
+```
+
+
+## Exercise 6.1
+
+Create a histogram of the height variable inside the ``starwars`` data set.
+
+```{r}
+
+```
+
+## Exercise 6.2
+
+Add a title to the previous plot using ``ggtitle()``.
+
+```{r}
+
+```
+
+## Exercise 6.3
+
+Change the label of the x axis in the previous plot to say "height in cm".
+
+```{r}
+
+```
+
+## Exercise 6.4
+
+From the ``starwars`` data, create a scatterplot of height vs. mass. What's the problem?
+
+```{r}
+
+```
+
+Compute the log of mass and re-create the scatterplot.
+
+```{r}
+
+```
+
+Now exclude the outlier (use ``dplyr`` functions) and plot again.
+
+```{r}
+
+```
+
+Make the plot loo nicer (add title, change x and y labels)
+
+```{r}
+
+```
+
+## Exercise 6.5
+
+Use the previous scatterplot and add a smooth line to it.
+
+```{r}
+
+```
+
+Now, use set ``method = "lm"`` argument. What does this do?
+
+```{r}
+
+```
+
+## Exercise 6.6
+
+To the previous plot, add color by gender.
+
+```{r}
+
+```
+
+Now, unnest the films variable (using the ``tidyr`` function ``unnest()``) and use the same plot as before, but now faceted by films.
+
+```{r}
+
+```
+
+## Exercise 6.7
+
+Load the ``data/kicker_match_data.csv`` and re-create one of the plot from the lecture video. 
+
+```{r}
+
+```
+
+Now, try to improve upon it, or try out something new.
+
+```{r}
+
+```
+

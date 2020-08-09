@@ -1,0 +1,88 @@
+---
+title: "Section 7 Exercises"
+output: html_notebook
+---
+
+## Exercise 7.0
+
+Load the ``tidyverse`` package and the ``starwars`` data set.
+
+```{r}
+library(tidyverse)
+starwars <- starwars
+```
+
+## Exercise 7.1
+
+From the ``starwars`` data, create a model matrix, with independent variables mass and gender. Gender is a character variable, so what happens with it?
+
+```{r}
+
+```
+
+## Exercise 7.2
+
+Load the ``data/kicker_match_data.csv`` as ``kicker_data``. Run a linear regression with goals as the dependent variable and tackling rate (in %) and pass completion rate (in %) as independent variables. Use the ``summary()`` function to see the results.
+
+```{r}
+
+```
+
+Now, instead of additive effect, run the model with an interaction between the two independent variables. Inspect the results.
+
+```{r}
+
+```
+
+## Exercise 7.3
+
+Run the previous regression again, but now as a Poisson GLM using the ``glm()`` function with ``family = poisson()``. 
+
+```{r}
+
+```
+
+Compute the predictions for the Poisson GLM. Do these look reasonable to you (hint: you can plot them with ggplot or use ``summary()`` on the vector of predictions)? 
+
+```{r}
+
+```
+
+Now, use ``predict()`` with argument ``type == "response"``. Check out ``?predict.glm()`` and explain (to yourself) the difference between the two predicitons.
+
+```{r}
+
+```
+
+## Exercise 7.4
+
+Load the ``broom`` package.
+
+```{r}
+
+```
+
+Make a tidy tibble of regression coefficients from the Poisson regression.
+
+```{r}
+
+```
+
+Filter this tibble so that there is no ``(Intercept)`` term. Then compute the approximate percentage change as a new variable we briefly discussed in the lecture, now using ```mutate()``. Save the resulting tibble as ``poisson_coefs``.
+
+```{r}
+
+```
+
+Now, use ``poisson_coefs`` and put it into ggplot. Create a plot with ``term`` on the y axis and the approx. percentage change in goals estimate on the x axis. Add a layer of points.
+
+```{r}
+
+```
+
+Now, add a few more regressors (whichever you see fit) to the model and re-do the plot above.
+
+```{r}
+
+```
+

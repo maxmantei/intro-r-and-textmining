@@ -1,0 +1,122 @@
+---
+title: "Section 5 Exercises"
+output: html_notebook
+---
+
+## Exercise 5.0
+
+If you did not already, download the ``tidyverse`` package. If you are done, load it using ``library()``.
+
+```{r}
+
+```
+
+## Exercise 5.1
+
+Use the pipe operator to pipe ``f`` into the ``paste()`` function, so that the resulting vector is saying
+"i is equal to i" 
+for every number i in ``f``.
+Hint: Use the ``.`` (dot) to input f into two postions of ``paste()``.
+
+```{r}
+f <- runif(20)
+
+```
+
+## Exercise 5.2
+
+Read-in the ``data/kicker_match_data.csv`` using ``readr``. You can use the drop down menu, or use ``read_csv()`` directly. Save the data set to ``kicker_data``.
+
+```{r}
+
+```
+
+## Exercise 5.3
+
+From the ``kicker_data`` select match_id, team, goals, and shots.
+
+```{r}
+
+```
+
+## Exercise 5.4
+
+From the ``kicker_data`` select team, and all variables with data on passing statistics.
+
+```{r}
+
+```
+
+## Exercise 5.5
+
+From the ``kicker_data`` select team, and all variable that are coded as percentages (those are ending with ``_pct``).
+
+```{r}
+
+```
+
+## Exercise 5.6
+
+From the ``kicker_data`` filter all matches from division 1. How many observations are in the new dataset? How many matches were played in divison 1?
+
+```{r}
+
+```
+
+## Exercise 5.7
+
+From the ``kicker_data`` filter all observations where the number of goals scored by a team is greater or equal to 5. Which team(s) most frequently scored more than 4 goals?
+
+```{r}
+
+```
+
+## Exercise 5.8
+
+From the ``kicker_data`` filter all observations where ball possesion *and* tackling rate (percentage) was fairly even, i.e. between 49% and 51%.
+
+```{r}
+
+```
+
+## Exercise 5.9
+
+With the ``kicker_data`` create a new variable, which holds the average distance run *by player*. To simplify, assume there were always 11 players on the field for each team.
+
+```{r}
+
+```
+
+
+## Exercise 5.10
+
+Group the ``kicker_data`` by match ID. Calculate the sum of goals by match (use ``mutate()``) and then create a new varaible called ``boring``, which has the value TRUE if the sum of goals in a match is 0 and FALSE if not.
+
+```{r}
+
+```
+
+## Exercise 5.11
+
+From the ``kicker_data`` filter divison 1 and then group by team. Use ``summarize()`` to calulate the sum of goals each divison 1 team scored. Arrange the dataset by sum of goals (descending).
+
+```{r}
+
+```
+
+## Exercise 5.12
+
+Group the ``kicker_data`` by matchday and division. Use ``mutate()`` to calculate the sum of goals per matchday and division. Then calulate each teams share of this sum (hint: simply divide goals by the new calculated sum).
+
+```{r}
+
+```
+
+## Exercise 5.13
+
+Use the ``pivot_wider()`` function to make the match the unit of observation (just like in the lecture video).
+
+```{r}
+
+```
+
