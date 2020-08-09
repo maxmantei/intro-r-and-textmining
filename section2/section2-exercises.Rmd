@@ -1,0 +1,48 @@
+---
+title: "Section 2 Exercise"
+output: html_notebook
+---
+
+## Exercise 2.1
+
+Write an input prompt asking you for your name. 
+Use the ``readline()`` function and its ``promt`` argument.
+
+```{r}
+
+```
+
+## Exercise 2.2
+
+Before you do this exercise:
+**First, click on the "Preview" dropdown, go to "Knit Directory" and select "Project Directory"**
+*You should always do that if you want to read in data files fromt the data folder!*
+
+Read in the file "data/example.txt" using the ``readLines()`` function.
+Save the result to a variable. 
+
+```{r}
+
+
+```
+
+## Exercise 2.3
+
+Add a new element, a short text, at the end of the vector you created in the previous exercise.
+You can use ``c()`` to concatenate the vector from before with your new string element.
+Save the new vector to a file called ``example3.txt`` inside the ``data`` folder.
+
+```{r}
+
+```
+
+## Exercise 2.4
+
+Read in the ``data/kicker_match_data.csv`` using the drop down menu "Import Dataset"
+in the "Evironment" pane (default: top right).
+
+## Exercise 2.5
+
+Import the ``maketable.dta`` file in the ``data`` folder using the drop down menu (use "From Stata").
+
+

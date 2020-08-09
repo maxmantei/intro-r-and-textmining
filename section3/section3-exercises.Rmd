@@ -1,0 +1,106 @@
+---
+title: "Section 3 Exercise"
+output: html_notebook
+---
+
+## Exercise 3.1
+
+Read in the ``data/kicker_match_data.csv``. Give it the name ``kicker`` (on the left in the import menu).
+How many rows are in that data frame?
+How many columns?
+
+```{r}
+
+```
+
+Print out the first 5 rows of the ``kicker`` data frame using ``head()``.
+
+```{r}
+
+```
+
+Print out the last 5 rows of the ``kicker`` data frame using ``tails()``.
+
+```{r}
+
+```
+
+
+## Exercise 3.2
+
+What are the column names of the ``kicker`` data frame?
+
+```{r}
+
+```
+
+## Exercise 3.3
+
+Extract the ``team`` column using two different ways!
+
+```{r}
+
+```
+
+## Exercise 3.4
+
+Extract rows 30 to 60 of the ``kicker`` data frame.
+
+```{r}
+
+```
+
+## Exercise 3.5
+
+Use a function to find out about the *structure* of the ``kicker`` data frame.
+
+```{r}
+
+```
+
+Use a function to get summaries of each column in the ``kicker`` data frame.
+
+```{r}
+
+```
+
+## Exercise 3.6
+
+Run the following chunk.
+
+```{r}
+my_list <- list(Booleans = c(T, F), Letters = LETTERS, Data = data.frame(num = 7:10, month = month.name[7:10]))
+```
+
+Get the names of ``my_list``.
+
+```{r}
+
+```
+
+Whats the length of ``my_list``?
+
+```{r}
+
+```
+
+## Exercise 3.7
+
+Extract the "Letters" vector from the list. What are the *3* different ways to do this?
+
+```{r}
+
+```
+
+## Exercise 3.8
+
+Extract the second row of the data frame (called Data) stored in ``my_list``
+
+```{r}
+
+```
+
+
+
+
+

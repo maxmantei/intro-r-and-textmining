@@ -1,0 +1,160 @@
+---
+title: "Section 1 Exercises"
+output: html_notebook
+---
+
+## Exercise 1.1
+
+Compute 42 + log(3.13).
+
+Put the code into the follwing R chunk. To evaluate the expression click 
+*Run current chunk* (the green triangle/play button on the right).
+
+```{r}
+42 + log(3.13)
+```
+
+The result should be ``[1] 43.14103``.
+
+## Exercise 1.2
+
+Look up the help file for the ``log()`` function (use the ``?``).
+
+```{r}
+
+```
+
+## Exercise 1.3
+
+What is the log (base 3) of 9, i.e. $\log_3(9)$? 
+(You can hover the mouse over the LaTex expression between the dollar sign to see LaTex formatting).
+
+```{r}
+
+```
+
+## Exercise 1.4
+
+What is the best way to compute 81 to the power of one half, i.e. $81^{1/2}$?
+(You can hover the mouse over the LaTex expression between the dollar sign to see LaTex formatting).
+
+```{r}
+
+```
+
+## Exercise 1.5
+
+How many characters are in this sentence:
+
+``The quick brown fox jumps over the lazy dog``
+
+Hint: Create a chracter variable with this sentence and then use the ``nchar`` function.
+
+```{r}
+
+```
+
+## Exercise 1.6
+
+Compute the square root of ``x``. You need to convert ``x`` to *numeric* before that.
+
+```{r}
+x <- "1522756"
+
+
+
+
+```
+
+## Exercise 1.7
+
+Use the ``is.logical`` function on ``a`` and ``b``. What do the results mean?
+
+```{r}
+a <- TRUE
+b <- "TRUE"
+
+
+```
+
+## Exercise 1.8
+
+What happens if you use ``as.numeric`` on variables ``k`` and ``l``?
+What happens if you use ``as.character``?
+
+```{r}
+k <- TRUE
+l <- FALSE
+```
+
+## Exercise 1.9
+
+Use ``as.logical`` on the following vector. Explain the results.
+
+```{r}
+f <- c(1, 0, 3)
+
+
+
+```
+
+## Exercise 1.10
+
+Compute the log of the vector ``g`` and store the result to another variable.
+Use the functions ``is.nan()`` ans ``is.na()`` on this new vector.
+
+```{r}
+g <- c(2, 6, -1, 0)
+
+
+
+```
+
+## Exercise 1.11
+
+Extract all negative values from the vector ``g`` (run the previous chunk if you haven't already).
+You can use indexes or a logical operation.
+
+```{r}
+
+```
+
+
+## Exercise 1.12
+
+Are there any values greater that 2 in the vector ``z``? 
+Use a logical operation and the ``any()`` function.
+
+How many values are greater than 2?
+Use a logical operation and ``sum()``. (Why does this work?)
+
+```{r}
+z <- rnorm(n = 1000, mean = 0, sd = 1)
+
+
+
+```
+
+## Exercise 1.13
+
+Create a "stupid" calendar:
+It should be a character vector, where the elements are
+
+"1 of Jan", "2 of Jan", ..., "29 of Dec", "30 of Dec"
+
+Assume that every month has 30 days. 
+Use ``month.abb`` to get the month abrreviations.
+Hint: Use the ``rep`` and ``paste`` functions as needed!
+
+```{r}
+
+
+
+
+
+```
+
+
+
+
+

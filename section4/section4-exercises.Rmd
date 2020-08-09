@@ -1,0 +1,99 @@
+---
+title: "Section 4 Exercise"
+output: html_notebook
+---
+
+## Exercise 4.1
+
+Insert the correct conditions into the if and else if statements (replace ###'s).
+
+```{r}
+compare <- function(x, a = 2){
+  if(###){
+    result <- paste(x, "is equal to", a)
+  } else if(###){
+    result <- paste(x, "is greater than", a)
+  } else{
+    result <- paste(x, "is less than", a)
+  }
+  return(result)
+}
+
+compare(0)
+compare(-1)
+compare(2)
+compare(5)
+compare(1, 1)
+```
+
+## Exercise 4.2
+
+Insert the correct iterators in the loop (replace ###'s).
+Note, that you need to have the ``compare`` function working!
+
+```{r}
+compare_vector <- function(x, a = 2){
+  N <- length(x)
+  result <- vector(mode = "character", length = N)
+  for(###){
+    result[###] <- compare(x[###], a)
+  }
+  return(result)
+}
+
+f <- rpois(15, 2)
+compare_vector(f)
+```
+
+## Exercise 4.3
+
+Remember the "stupid" calendar you build in the section exercises 1?
+Now, build a correct calendar vector and add *st*, *nd*, *rd* or *th* after the days:
+
+"1st of Jan", "2nd of Feb", ..., "30th of Dec", "31st of Dec"
+
+There are multiple ways how you could go about this. You can use ``rep`` and ``paste`` 
+and make use of recycling. Or you can use loops and/or functions.
+
+```{r}
+# this might be useful, but feel free to ignore this
+# if you run this chunk, you can use the days_per_month vector in other chunks...
+days_per_month <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+names(days_per_month) <- month.abb
+days_per_month
+```
+
+```{r}
+# build your calendar here
+
+
+
+
+```
+
+## Exercise 4.4
+
+Build a function that takes in a character vector with a single element.
+The input will be a string with multiple words (a sentence).
+
+In your function, reverse *every second* word and return the sentence.
+
+Hint: Look up ``strsplit`` and the argument ``split``. 
+You might need to ``unlist`` the result of ``strsplit``.
+
+```{r}
+
+reverse_second <- function(string){
+  
+}
+
+```
+
+Check your function:
+
+```{r}
+# This should result in:
+# "the kciuq brown xof jumps revo the yzal dog"
+reverse_second("the quick brown fox jumps over the lazy dog")
+```
+
