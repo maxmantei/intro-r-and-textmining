@@ -1,0 +1,1 @@
+This repository contains course materials for *Introcution to R and Textmining*.
