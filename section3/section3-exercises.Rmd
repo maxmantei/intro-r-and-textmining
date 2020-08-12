@@ -19,7 +19,7 @@ Print out the first 5 rows of the ``kicker`` data frame using ``head()``.
 
 ```
 
-Print out the last 5 rows of the ``kicker`` data frame using ``tails()``.
+Print out the last 5 rows of the ``kicker`` data frame using ``tail()``.
 
 ```{r}
 
