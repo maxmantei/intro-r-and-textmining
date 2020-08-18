@@ -7,7 +7,7 @@ output: html_notebook
 
 Compute 42 + log(3.13).
 
-Put the code into the follwing R chunk. To evaluate the expression click 
+Put the code into the following R chunk. To evaluate the expression click 
 *Run current chunk* (the green triangle/play button on the right).
 
 ```{r}
@@ -48,7 +48,7 @@ How many characters are in this sentence:
 
 ``The quick brown fox jumps over the lazy dog``
 
-Hint: Create a chracter variable with this sentence and then use the ``nchar`` function.
+Hint: Create a character variable with this sentence and then use the ``nchar`` function.
 
 ```{r}
 
@@ -143,7 +143,7 @@ It should be a character vector, where the elements are
 "1 of Jan", "2 of Jan", ..., "29 of Dec", "30 of Dec"
 
 Assume that every month has 30 days. 
-Use ``month.abb`` to get the month abrreviations.
+Use ``month.abb`` to get the month abbreviations.
 Hint: Use the ``rep`` and ``paste`` functions as needed!
 
 ```{r}

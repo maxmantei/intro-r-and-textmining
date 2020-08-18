@@ -37,7 +37,7 @@ library(tidyverse)
 help("stringr")
 ```
 
-Go to useful links and click on http://stringr.tidyverse.org. There you will find a link to the *cheatsheet* for ``stringr``.
+Go to useful links and click on http://stringr.tidyverse.org. There you will find a link to the *cheat sheet* for ``stringr``.
 
 Recall the ``readr`` package, which contains the ``read_csv`` function although there is a built-in ``read.csv`` function in base R.
 
@@ -87,7 +87,7 @@ str_match(fruit, "(b|m)*(an)(ana|go)(s)*")
 
 Regular expressions are beyond the scope of this course, but if you are serious about working with text data, you have to learn them.
 
-Again, you should also check out the ``stringr`` cheatsheet (page 2)!
+Again, you should also check out the ``stringr``  (page 2)!
 
 Check out chapter 14 in *R for Data Science*.
 

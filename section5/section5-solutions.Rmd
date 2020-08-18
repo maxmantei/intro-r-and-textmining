@@ -1,5 +1,5 @@
 ---
-title: "Section 5 Exercises"
+title: "Section 5 Solutions"
 output: html_notebook
 ---
 
@@ -8,6 +8,8 @@ output: html_notebook
 If you did not already, download the ``tidyverse`` package. If you are done, load it using ``library()``.
 
 ```{r}
+
+library(tidyverse)
 
 ```
 
@@ -19,7 +21,10 @@ for every number i in ``f``.
 Hint: Use the ``.`` (dot) to input f into two positions of ``paste()``.
 
 ```{r}
+
 f <- runif(20)
+
+f %>% paste(., "is equal to", .)
 
 ```
 
@@ -29,6 +34,8 @@ Read-in the ``data/kicker_match_data.csv`` using ``readr``. You can use the drop
 
 ```{r}
 
+kicker_data <- read_csv("data/kicker_match_data.csv")
+
 ```
 
 ## Exercise 5.3
@@ -36,6 +43,8 @@ Read-in the ``data/kicker_match_data.csv`` using ``readr``. You can use the drop
 From the ``kicker_data`` select match_id, team, goals, and shots.
 
 ```{r}
+
+kicker_data %>% select(match_id, team, goals, shots)
 
 ```
 
@@ -45,6 +54,8 @@ From the ``kicker_data`` select team, and all variables with data on passing sta
 
 ```{r}
 
+kicker_data %>% select(team, starts_with("pass"))
+
 ```
 
 ## Exercise 5.5
@@ -52,6 +63,8 @@ From the ``kicker_data`` select team, and all variables with data on passing sta
 From the ``kicker_data`` select team, and all variable that are coded as percentages (those are ending with ``_pct``).
 
 ```{r}
+
+kicker_data %>% select(team, ends_with("_pct"))
 
 ```
 
@@ -61,6 +74,12 @@ From the ``kicker_data`` filter all matches from division 1. How many observatio
 
 ```{r}
 
+kicker_data %>% filter(division == 1)
+
+# output shows there are 612 rows
+# we know that there are two observations per match, so
+# number of matches is 612/2 = 306
+
 ```
 
 ## Exercise 5.7
@@ -68,6 +87,10 @@ From the ``kicker_data`` filter all matches from division 1. How many observatio
 From the ``kicker_data`` filter all observations where the number of goals scored by a team is greater or equal to 5. Which team(s) most frequently scored more than 4 goals?
 
 ```{r}
+
+kicker_data %>% 
+  filter(goals >= 5) %>% 
+  count(team, sort = TRUE)
 
 ```
 
@@ -77,6 +100,12 @@ From the ``kicker_data`` filter all observations where ball possession *and* tac
 
 ```{r}
 
+kicker_data %>% 
+  filter(
+    between(possession_pct, 49, 51), 
+    between(tackeling_rate_pct, 49, 51)
+  )
+
 ```
 
 ## Exercise 5.9
@@ -84,6 +113,9 @@ From the ``kicker_data`` filter all observations where ball possession *and* tac
 With the ``kicker_data`` create a new variable, which holds the average distance run *by player*. To simplify, assume there were always 11 players on the field for each team.
 
 ```{r}
+
+kicker_data %>%
+  mutate(distance_avg_km = distance_km/11)
 
 ```
 
@@ -94,6 +126,13 @@ Group the ``kicker_data`` by match ID. Calculate the sum of goals by match (use 
 
 ```{r}
 
+kicker_data %>% 
+  group_by(match_id) %>%
+  mutate(
+    goals_sum = sum(goals),
+    boring = if_else(goals_sum == 0, TRUE, FALSE)
+  )
+
 ```
 
 ## Exercise 5.11
@@ -101,6 +140,12 @@ Group the ``kicker_data`` by match ID. Calculate the sum of goals by match (use 
 From the ``kicker_data`` filter division 1 and then group by team. Use ``summarize()`` to calculate the sum of goals each division 1 team scored. Arrange the dataset by sum of goals (descending).
 
 ```{r}
+
+kicker_data %>% 
+  filter(division == 1) %>%
+  group_by(team) %>%
+  summarise(goals = sum(goals)) %>%
+  arrange(desc(goals))
 
 ```
 
@@ -110,6 +155,11 @@ Group the ``kicker_data`` by matchday and division. Use ``mutate()`` to calculat
 
 ```{r}
 
+kicker_data %>%
+  group_by(matchday, division) %>%
+  mutate(goals_total_matchday = sum(goals),
+         goals_share = goals/goals_total_matchday)
+
 ```
 
 ## Exercise 5.13
@@ -117,6 +167,14 @@ Group the ``kicker_data`` by matchday and division. Use ``mutate()`` to calculat
 Use the ``pivot_wider()`` function to make the match the unit of observation (just like in the lecture video).
 
 ```{r}
+
+kicker_data %>%
+  pivot_wider(
+    id_cols = c(match_id, division, matchday),
+    names_from = side,
+    values_from = team:corners,
+    names_sep = "_"
+  )
 
 ```
 

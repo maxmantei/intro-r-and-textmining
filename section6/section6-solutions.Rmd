@@ -1,0 +1,196 @@
+---
+title: "Section 6 Solutions"
+output: html_notebook
+---
+
+## Exercise 6.0
+
+Load the ``tidyverse`` package and the ``starwars`` data set.
+
+```{r}
+library(tidyverse)
+starwars <- starwars
+```
+
+
+## Exercise 6.1
+
+Create a histogram of the height variable inside the ``starwars`` data set.
+
+```{r}
+starwars %>%
+  ggplot(aes(x = height)) +
+    geom_histogram()
+```
+
+## Exercise 6.2
+
+Add a title to the previous plot using ``ggtitle()``.
+
+```{r}
+starwars %>%
+  ggplot(aes(x = height)) +
+    geom_histogram() +
+    ggtitle("Historgram of heights of some Star Wars characters")
+```
+
+## Exercise 6.3
+
+Change the label of the x axis in the previous plot to say "height in cm".
+
+```{r}
+starwars %>%
+  ggplot(aes(x = height)) +
+    geom_histogram() +
+    ggtitle("Historgram of heights of some Star Wars characters") +
+    xlab("height in cm")
+```
+
+## Exercise 6.4
+
+From the ``starwars`` data, create a scatterplot of height vs. mass. What's the problem?
+
+```{r}
+
+starwars %>%
+  ggplot(aes(x = height, y = mass)) +
+  geom_point()
+# Outlier!
+
+```
+
+Compute the log of mass and re-create the scatterplot.
+
+```{r}
+
+starwars %>%
+  ggplot(aes(x = height, y = log(mass))) +
+  geom_point()
+
+```
+
+Now exclude the outlier (use ``dplyr`` functions) and plot again.
+
+```{r}
+
+starwars %>%
+  filter(mass != max(mass, na.rm = TRUE)) %>%
+  ggplot(aes(x = height, y = log(mass))) +
+  geom_point()
+
+```
+
+Make the plot loo nicer (add title, change x and y labels)
+
+```{r}
+
+scatter <- starwars %>%
+  filter(mass != max(mass, na.rm = TRUE)) %>%
+  ggplot(aes(x = height, y = log(mass))) +
+  geom_point() +
+  ggtitle("Heights vs. Mass of some Star Wars characters",
+          subtitle = "Jabba was excluded...") +
+  xlab("height in cm") +
+  ylab("natural log of mass in kg")
+scatter
+
+```
+
+## Exercise 6.5
+
+Use the previous scatterplot and add a smooth line to it.
+
+```{r}
+
+scatter + geom_smooth()
+
+```
+
+Now, use set ``method = "lm"`` argument. What does this do?
+
+```{r}
+
+# instead of a loess or GAM (non-linear),
+# the "lm" method will plot a linear trend
+scatter + geom_smooth(method = "lm")
+
+```
+
+## Exercise 6.6
+
+To the previous plot, add color by gender.
+
+```{r}
+
+starwars %>%
+  filter(mass != max(mass, na.rm = TRUE)) %>%
+  replace_na(list(gender = "none")) %>% # this'll make the plot look much nicer
+  ggplot(aes(x = height, y = log(mass), color = gender)) +
+    geom_point() +
+    ggtitle("Heights vs. Mass of some Star Wars characters",
+            subtitle = "Jabba was excluded...") +
+    xlab("height in cm") +
+    ylab("natural log of mass in kg") + 
+    geom_smooth(method = "lm")
+
+```
+
+Now, unnest the films variable (using the ``tidyr`` function ``unnest()``) and use the same plot as before, but now faceted by films.
+
+```{r}
+
+starwars %>%
+  filter(mass != max(mass, na.rm = TRUE)) %>%
+  replace_na(list(gender = "none")) %>% # this'll make the plot look much nicer
+  unnest(films) %>%
+  ggplot(aes(x = height, y = log(mass), color = gender)) +
+    geom_point() +
+    ggtitle("Heights vs. Mass of some Star Wars characters",
+            subtitle = "Jabba was excluded...") +
+    xlab("height in cm") +
+    ylab("natural log of mass in kg") + 
+    geom_smooth(method = "lm") +
+  facet_wrap(~films)
+
+```
+
+## Exercise 6.7
+
+Load the ``data/kicker_match_data.csv`` and re-create one of the plot from the lecture video. 
+
+```{r}
+kicker_data <- read_csv("data/kicker_match_data.csv")
+
+kicker_data %>%
+  group_by(matchday) %>%
+  mutate(mean_distance = mean(distance_km)) %>%
+  filter(team %in% some_teams) %>%
+  ggplot(aes(x = matchday)) +
+  geom_col(aes(y = distance_km, fill = side)) +
+  geom_line(aes(y = mean_distance), linetype = "dashed") +
+  ggtitle("Distance run by match day")  +
+  ylab("distance in km") +
+  coord_cartesian(ylim = c(100,125)) +
+  facet_wrap(~team)
+```
+
+Now, try to improve upon it, or try out something new.
+
+```{r}
+
+kicker_data %>%
+  group_by(matchday, division) %>%
+  mutate(mean_distance = mean(distance_km),
+         distance_deviation = distance_km - mean_distance) %>%
+  filter(team %in% some_teams) %>%
+  ggplot(aes(x = matchday)) +
+  geom_point(aes(y = distance_km, color = distance_deviation, size = distance_deviation^2)) +
+  geom_line(aes(y = mean_distance), linetype = "dashed") +
+  ggtitle("Distance run by match day")  +
+  ylab("distance in km") +
+  scale_color_gradient(low = "red", high = "blue") +
+  facet_wrap(~team)
+# could be made more pretty...
+
+```
+

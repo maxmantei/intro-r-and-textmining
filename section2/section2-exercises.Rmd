@@ -6,7 +6,7 @@ output: html_notebook
 ## Exercise 2.1
 
 Write an input prompt asking you for your name. 
-Use the ``readline()`` function and its ``promt`` argument.
+Use the ``readline()`` function and its ``prompt`` argument.
 
 ```{r}
 
@@ -15,8 +15,8 @@ Use the ``readline()`` function and its ``promt`` argument.
 ## Exercise 2.2
 
 Before you do this exercise:
-**First, click on the "Preview" dropdown, go to "Knit Directory" and select "Project Directory"**
-*You should always do that if you want to read in data files fromt the data folder!*
+**First, click on the "Preview" drop down, go to "Knit Directory" and select "Project Directory"**
+*You should always do that if you want to read in data files from the data folder!*
 
 Read in the file "data/example.txt" using the ``readLines()`` function.
 Save the result to a variable. 
@@ -39,7 +39,7 @@ Save the new vector to a file called ``example3.txt`` inside the ``data`` folder
 ## Exercise 2.4
 
 Read in the ``data/kicker_match_data.csv`` using the drop down menu "Import Dataset"
-in the "Evironment" pane (default: top right).
+in the "Environment" pane (default: top right).
 
 ## Exercise 2.5
 

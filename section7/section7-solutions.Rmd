@@ -1,5 +1,5 @@
 ---
-title: "Section 7 Exercises"
+title: "Section 7 Solutions"
 output: html_notebook
 ---
 
@@ -18,6 +18,12 @@ From the ``starwars`` data, create a model matrix, with independent variables ma
 
 ```{r}
 
+starwars %>% 
+  model.matrix(~ mass + gender, data = .)
+# missing values will be removed,
+# categorical data will be turned
+# into dummy variables
+
 ```
 
 ## Exercise 7.2
@@ -26,11 +32,21 @@ Load the ``data/kicker_match_data.csv`` as ``kicker_data``. Run a linear regress
 
 ```{r}
 
+kicker_data <- read_csv("data/kicker_match_data.csv")
+
+lin_reg1 <- lm(goals ~ tackeling_rate_pct + pass_completion_rate_pct, data = kicker_data)
+
+summary(lin_reg1)
+
 ```
 
 Now, instead of additive effect, run the model with an interaction between the two independent variables. Inspect the results.
 
 ```{r}
+
+lin_reg2 <- lm(goals ~ tackeling_rate_pct*pass_completion_rate_pct, data = kicker_data)
+
+summary(lin_reg2)
 
 ```
 
@@ -40,18 +56,44 @@ Run the previous regression again, but now as a Poisson GLM using the ``glm()`` 
 
 ```{r}
 
+pois_reg1 <- glm(
+  goals ~ tackeling_rate_pct*pass_completion_rate_pct, 
+  data = kicker_data,
+  family = poisson(link = "log")
+  )
+
+summary(pois_reg1)
+
 ```
 
 Compute the predictions for the Poisson GLM. Do these look reasonable to you (hint: you can plot them with ggplot or use ``summary()`` on the vector of predictions)? 
 
 ```{r}
 
+pois_reg1_pred <- predict(pois_reg1)
+
+summary(pois_reg1_pred)
+
+ggplot(data = NULL, # we do not provide a dataset here
+       aes(x = pois_reg1_pred)) +
+  geom_histogram()
+
+# there are negative values, and
+# overall the predictions seem too low
+
 ```
 
 Now, use ``predict()`` with argument ``type == "response"``. Check out ``?predict.glm()`` and explain (to yourself) the difference between the two predictions.
 
 ```{r}
+# The default is to return the linear predictor
+# on the scale implied by the link function.
+# Use type = "response" to apply the inverse link function...
+pois_reg1_pred <- predict(pois_reg1, type = "response")
 
+summary(pois_reg1_pred)
+# this makes more sense: predicted expectations
+# on the scale of the response variable
 ```
 
 ## Exercise 7.4
@@ -59,30 +101,53 @@ Now, use ``predict()`` with argument ``type == "response"``. Check out ``?predic
 Load the ``broom`` package.
 
 ```{r}
-
+library(broom)
 ```
 
 Make a tidy tibble of regression coefficients from the Poisson regression.
 
 ```{r}
-
+pois_reg1_coefs <- tidy(pois_reg1)
+pois_reg1_coefs
 ```
 
 Filter this tibble so that there is no ``(Intercept)`` term. Then compute the approximate percentage change as a new variable we briefly discussed in the lecture, now using ```mutate()``. Save the resulting tibble as ``poisson_coefs``.
 
 ```{r}
-
+poisson_coefs <- pois_reg1_coefs %>%
+  filter(term != "(Intercept)") %>%
+  mutate(approx_pct_change = 100 * (exp(estimate) - 1))
 ```
 
 Now, use ``poisson_coefs`` and put it into ggplot. Create a plot with ``term`` on the y axis and the approx. percentage change in goals estimate on the x axis. Add a layer of points.
 
 ```{r}
-
+poisson_coefs %>%
+  ggplot(aes(y = term, x = approx_pct_change)) +
+  geom_point()
 ```
 
 Now, add a few more regressors (whichever you see fit) to the model and re-do the plot above.
 
 ```{r}
 
+kicker_data %>% glm(
+  goals ~ side + shots + distance_km + possession_pct + 
+    corners + fouled + offside + tackeling_rate_pct*pass_completion_rate_pct, 
+  data = .,
+  family = poisson(link = "log")
+  ) %>%
+  tidy() %>%
+  filter(term != "(Intercept)") %>%
+  mutate(approx_pct_change = 100 * (exp(estimate) - 1)) %>%
+  ggplot(aes(y = term, x = approx_pct_change)) +
+    geom_point()
+
 ```
+
+
+
+
+
+
 
