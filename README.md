@@ -41,5 +41,9 @@ The course is split into 8 sections (plus one introduction). Note that the cours
 
 - [R for Data Science: Tidy Tuesday](https://github.com/rfordatascience/tidytuesday) (dataset repository)
 
+#### My blog
+
+- [maxmantei.com](https://www.maxmantei.com/)
+
 
 
